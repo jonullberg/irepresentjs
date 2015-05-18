@@ -10,7 +10,7 @@ var expect = chai.expect;
 var app = 'localhost:3000';
 chai.use(chaihttp);
 
-var User = require('../model/User');
+var User = require('../models/User');
 
 describe('The login API', function() {
 	describe('Creating a user', function() {
@@ -49,7 +49,7 @@ describe('The login API', function() {
 				.post('/users')
 				.send({
 					'username': 'testUser',
-					'password': 'foobar123'
+					'password': 'foobar123j'
 				})
 				.end(function(err, res) {
 					expect(res.body['success']).to.equal(false);
