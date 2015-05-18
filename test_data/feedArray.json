@@ -1,0 +1,35 @@
+[{
+	"issue_id": 0005,
+	"title": "I don't like bike lanes",
+	"description": "There are too many bike lanes and we need to get rid of them so cars have room",
+	"votes": {
+		"up-votes": 23,
+		"down-votes": 20
+	},
+	"date-created": "May 14, 2014",
+	"user-voted": 0
+},
+{
+	"issue_id": 0009,
+	"author_id": 00023,
+	"title": "I want more bus routes for SLU",
+	"description": "It takes too long to get a bus in SLU and a lot of times they are full.  We need to have more buses and routes for this growing area",
+	"votes": {
+		"up-votes": 45,
+		"down-votes": 9
+	},
+	"date-created": "September 14, 2013",
+	"user-voted": 1
+},
+{
+	"issue_id": 0017,
+	"title": "No more naked bike riders in Fremont",
+	"description": "I don't like seeing naked people on bikes",
+	"votes": {
+		"up-votes": 2,
+		"down-votes": 210
+	},
+	"date-created": "November 22, 2014",
+	"user-voted": -1
+}
+]
