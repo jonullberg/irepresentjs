@@ -1,0 +1,13 @@
+{
+	"user_id": 00023,
+	"username": "testy",
+	"basic": {
+		"email": "test@example.com",
+		"password": "foobar123"
+	},
+	"zip": 98001,
+	"politicians": {
+
+	},
+	"hidden-issues": [0004, 0008, 0015, 0016, 0023, 0042]
+}
