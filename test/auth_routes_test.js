@@ -49,7 +49,7 @@ describe('The login API', function() {
 				.post('/users')
 				.send({
 					'username': 'testUser',
-					'password': 'foobar123j'
+					'password': 'foobar123'
 				})
 				.end(function(err, res) {
 					expect(res.body['success']).to.equal(false);
