@@ -1,11 +1,10 @@
 'use strict';
 
-var User = require('../model/User');
+var User = require('../models/User');
 var bodyparser = require('body-parser');
-var mongoose = require('mongoose');
 var passport = require('passport');
 
-module.exports = function(router) {
+module.exports = function(router, passport) {
 	router.use(bodyparser.json());
 
 	router.post('/users', function(req, res) {
@@ -43,7 +42,7 @@ module.exports = function(router) {
 
 					res.json({
 						'success': true,
-						'msg': 'You have succesfully created a user',
+						'msg': 'You have successfully created a user',
 						'data': {
 							'token': token,
 							'id': user._id

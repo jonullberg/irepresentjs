@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/irepresent_dev
 
 app.use(passport.initialize());
 
-require('./router/auth_routes')(usersRoutes, passport);
+require('./routes/auth_routes')(usersRoutes, passport);
 
 app.use(usersRoutes);
 
