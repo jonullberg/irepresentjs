@@ -24,6 +24,7 @@
     "chai-http": "^1.0.0",
     "gulp": "^3.8.11",
     "gulp-jshint": "^1.10.0",
+    "gulp-mocha": "^2.0.1",
     "jshint-stylish": "^1.0.2",
     "mocha": "^2.2.5"
   },

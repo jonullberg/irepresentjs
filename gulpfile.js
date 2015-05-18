@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var stylish = require('jshint-stylish');
+var nodemon = require('nodemon');
 
 var workingFiles = ['lib/**.js', 'models/**.js', 'tests/**.js', 'routes/**.js', 'server.js', 'gulpfile.js'];
 
