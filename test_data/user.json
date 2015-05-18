@@ -1,13 +1,17 @@
 {
 	"user_id": 00023,
-	"username": "testy",
 	"basic": {
 		"email": "test@example.com",
 		"password": "foobar123"
 	},
-	"zip": 98001,
-	"politicians": {
+	// "zip": 98001,  Can be added to functionality later
+	// "politicians": {
 
-	},
-	"hidden-issues": [0004, 0008, 0015, 0016, 0023, 0042]
+	// },
+	"voted-issue": {
+		"0005": true,
+		"0009": false,
+		"0017": false,
+	}
+	// "hidden-issues": [0004, 0008, 0015, 0016, 0023, 0042]
 }
