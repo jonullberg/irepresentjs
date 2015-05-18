@@ -1,5 +1,6 @@
 'use strict';
 
+<<<<<<< HEAD
 var User = require('../models/User');
 var bodyparser = require('body-parser');
 var passport = require('passport');
@@ -51,5 +52,20 @@ module.exports = function(router, passport) {
 				});
 			});
 		});
+=======
+var mognoose = require('mongoose');
+var bodyparser = require('body-parser');
+
+module.exports = function(router, passport) {
+	router.user(bodyparser.json());
+
+	router.post('/sign_in', function(req, res) {
+		if (err) {
+			console.log(err);
+			return res.status(500).json({msg: 'internal server error'});
+		}
+
+		res.json({success: true, msg: 'sign in success'})
+>>>>>>> emrebranch
 	});
 };
