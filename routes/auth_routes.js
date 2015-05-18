@@ -13,12 +13,19 @@ module.exports = function(router, passport) {
 		delete newUserData.password;
 		var newUser = new User(newUserData);
 		newUser.basic.email = req.body.email;
+		if(req.body.password === undefined) {
+			console.log('No password submitted');
+			return res.status(401).json({
+				'success': false,
+				'msg': 'No password submitted' 
+			});
+		}
 		newUser.generateHash(req.body.password, function(err, hash) {
 			if(err) {
 				console.log(err);
 				return res.status(500).json({
 					'success': false,
-					'msg': 'Could not create user' 
+					'msg': 'Could not create user'
 				});
 
 			}
