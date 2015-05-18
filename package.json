@@ -27,7 +27,7 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt-nodejs": "latest",
     "body-parser": "^1.12.4",
     "eat": "^0.1.1",
     "express": "^4.12.3",

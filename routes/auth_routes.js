@@ -42,7 +42,7 @@ module.exports = function(router, passport) {
 
 					res.json({
 						'success': true,
-						'msg': 'You have succesfully created a user',
+						'msg': 'You have successfully created a user',
 						'data': {
 							'token': token,
 							'id': user._id
