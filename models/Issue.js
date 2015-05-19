@@ -13,6 +13,4 @@ var issueSchema = mongoose.schema({
 	date_created: String
 });
 
-issueSchema.methods.
-
 module.exports = mongoose.model('Issue', issueSchema);
