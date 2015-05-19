@@ -52,10 +52,29 @@ module.exports = function(router, passport) {
 						'msg': 'You have successfully created a user',
 						'data': {
 							'token': token,
-							'id': user._id
 						}
 					});
 				});
+			});
+		});
+	});
+
+	router.get('/sign_in', passport.authenticate('basic', { session: false }), function(req, res) {
+		req.user.generateToken(process.env.APP_SECRET, function(err, token) {
+			if(err) {
+				console.log(err);
+				return res.status(500).json({
+					'success': false,
+					'msg': 'Error generating token'
+				});
+			}
+
+			res.json({
+				'success': true,
+				'msg': 'You successfully logged in',
+				'data': {
+					'token': token
+				}
 			});
 		});
 	});

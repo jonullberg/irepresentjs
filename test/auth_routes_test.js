@@ -28,7 +28,6 @@ describe('The login API', function() {
 					expect(res).to.have.status(200);
 					expect(res.body['msg']).to.equal('You have successfully created a user');
 					expect(res.body['data']).to.have.property('token');
-					expect(res.body['data']).to.have.property('id');
 					done();
 				});
 		});
@@ -104,6 +103,66 @@ describe('The login API', function() {
 					});
 			});
 
+		});
+	});
+	describe('Logging in', function() {
+		it('Should be able to log-in a user with a password', function(done) {
+			chai.request(app)
+				.get('/sign_in')
+				.auth('unique@example.com', 'foobar123')
+				.end(function(err, res) {
+					expect(res.body.success).to.equal(true);
+					expect(res.body.msg).to.equal('You successfully logged in');
+					expect(res.body.data).to.have.property('token');
+					done();
+				});
+		});
+		it('Should give an error if logging in with the wrong password', function(done) {
+			chai.request(app)
+				.get('/sign_in')
+				.auth('unique@example.com', 'foobar124')
+				.end(function(err, res) {
+					console.log(res);
+					expect(res.body.success).to.equal(false);
+					expect(res.body.msg).to.equal('Error generating token');
+					done();
+				});
+
+		});
+		it('Should give an error if logging in with no password', function(done) {
+			chai.request(app)
+				.get('/sign_in')
+				.auth('unique@example.com', 'foobar123')
+				.end(function(err, res) {	// Need to update
+					done();
+				});
+
+		});
+		it('Should give an error if trying to log-in with no email', function(done) {
+			chai.request(app)
+				.get('/sign_in')
+				.auth('unique@example.com', 'foobar123')
+				.end(function(err, res) {	// Need to update
+					done();
+				});
+
+		});
+		it('Should give an error if logging in with an invalid email', function(done) {
+			chai.request(app)
+				.get('/sign_in')
+				.auth('unique@example.com', 'foobar123')
+				.end(function(err, res) {	// Need to update
+					done();
+				});
+
+		});
+		it('Should give an error if logging in with a correct username and not an email', function(done) {
+			chai.request(app)
+				.get('/sign_in')
+				.auth('unique@example.com', 'foobar123')
+				.end(function(err, res) {	// Need to update
+					done();
+				});
 		});
 	});
 	after(function(done) {
