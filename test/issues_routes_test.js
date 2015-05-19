@@ -36,7 +36,7 @@ describe('issue REST api', function() {
 			title: 'Test Title', 
 			content: 'I approve of testing. Let us do more!', 
 			votes: {up: 1, down: 0},
-			date_created: '05/11/15'
+			date_created: '20150511'
 		};
 
 		chai.request('localhost:3000')
@@ -47,6 +47,34 @@ describe('issue REST api', function() {
 				expect(err).to.eql(null);
 				expect(res.body.success).to.eql(true);
 				expect(res.body.msg).to.eql('New Issue Created');
+				done();
+			});
+	});
+
+	it('should get an array of issues on a get request (sort = default)', function(done) {
+		chai.request('localhost:3000')
+			.get('/issues')
+			.set({eat: testToken})
+			.end(function(err, res) {
+				//These should all fail for now
+				expect(err).to.eql(null);
+				expect(res.body.success).to.eql(true);
+				expect(res.body.msg).to.eql('Popular sort feed returned');
+				expect(Array.isArray(res.body.data)).to.eql(true);
+				done();
+			});
+	});
+
+	it('should get an array of issues on a get request (sort = newest)', function(done) {
+		chai.request('localhost:3000')
+			.get('/issues')
+			.query({sort: 'newest'})
+			.set({eat: testToken})
+			.end(function(err, res) {
+				expect(err).to.eql(null);
+				expect(res.body.success).to.eql(true);
+				expect(res.body.msg).to.eql('Newest sort feed returned');
+				expect(Array.isArray(res.body.data)).to.eql(true);
 				done();
 			});
 	});
