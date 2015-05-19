@@ -2,8 +2,8 @@
 
 var mongoose = require('mongoose');
 
-var issueSchema = mongoose.schema({
-	author_id: Number,
+var issueSchema = mongoose.Schema({
+	author_id: String,
 	title: String,
 	content: String,
 	votes: {
