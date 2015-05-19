@@ -122,9 +122,7 @@ describe('The login API', function() {
 				.get('/sign_in')
 				.auth('unique@example.com', 'foobar124')
 				.end(function(err, res) {
-					console.log(res);
-					expect(res.body.success).to.equal(false);
-					expect(res.body.msg).to.equal('Error generating token');
+					expect(res.error.text).to.equal('Wrong Password\n');
 					done();
 				});
 
@@ -132,8 +130,11 @@ describe('The login API', function() {
 		it('Should give an error if logging in with no password', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar123')
-				.end(function(err, res) {	// Need to update
+				.auth('unique@example.com')
+				.end(function(err, res) {
+					console.log(res);
+					expect(res.body.success).to.equal(false);
+					expect(res.error.msg).to.equal('Error generating token');
 					done();
 				});
 
