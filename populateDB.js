@@ -1,6 +1,8 @@
 //Run with 'node populateDB.js' call
 'use strict';
 
+var process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
+
 var mongoose = require('mongoose');
 var User = require('./models/User');
 var Issue = require('./models/Issue');
@@ -125,7 +127,7 @@ function saveIssue(issue, user, callback) {
 	})
 }
 
-mongoose.connect('mongodb://localhost/irepresent_dev', function() {
+mongoose.connect(process.env.MONGOLAB_URI, function() {
 	console.log('Opened connection to MongoDB');
 	createUsers(usersArray, function() {
 		createIssues(issuesArray, function() {

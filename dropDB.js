@@ -1,9 +1,10 @@
 //Run with 'node dropDB.js' call
 'use strict';
 
+var process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/irepresent_dev', function() {
+mongoose.connect(process.env.MONGOLAB_URI, function() {
 	console.log('Opened connection to MongoDB');
 	mongoose.connection.db.dropDatabase(function() {
 		console.log('Dropped Mongo DB');
