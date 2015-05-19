@@ -1,11 +1,10 @@
 'use strict';
 
-var User = require('../model/User');
+var User = require('../models/User');
 var bodyparser = require('body-parser');
-var mongoose = require('mongoose');
 var passport = require('passport');
 
-module.exports = function(router) {
+module.exports = function(router, passport) {
 	router.use(bodyparser.json());
 
 	router.post('/users', function(req, res) {
@@ -14,12 +13,19 @@ module.exports = function(router) {
 		delete newUserData.password;
 		var newUser = new User(newUserData);
 		newUser.basic.email = req.body.email;
+		if(req.body.password === undefined) {
+			console.log('No password submitted');
+			return res.status(401).json({
+				'success': false,
+				'msg': 'No password submitted' 
+			});
+		}
 		newUser.generateHash(req.body.password, function(err, hash) {
 			if(err) {
 				console.log(err);
 				return res.status(500).json({
 					'success': false,
-					'msg': 'Could not create user' 
+					'msg': 'Could not create user'
 				});
 
 			}
@@ -43,7 +49,7 @@ module.exports = function(router) {
 
 					res.json({
 						'success': true,
-						'msg': 'You have succesfully created a user',
+						'msg': 'You have successfully created a user',
 						'data': {
 							'token': token,
 							'id': user._id
