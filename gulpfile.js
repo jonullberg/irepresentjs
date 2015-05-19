@@ -4,9 +4,11 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var stylish = require('jshint-stylish');
+var nodemon = require('nodemon');
 
 var workingFiles = ['lib/**.js', 'models/**.js', 'tests/**.js', 'routes/**.js', 'server.js', 'gulpfile.js'];
 
+// Run "gulp nodemon" to start nodemon on a seperate console tab
 gulp.task('nodemon', function() {
 	nodemon({
 		script: 'server.js',
