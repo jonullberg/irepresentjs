@@ -1,3 +1,4 @@
+//Run with 'node dropDB.js' call
 'use strict';
 
 var mongoose = require('mongoose');

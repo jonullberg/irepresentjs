@@ -1,3 +1,4 @@
+//Run with 'node populateDB.js' call
 'use strict';
 
 var mongoose = require('mongoose');
