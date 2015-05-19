@@ -29,7 +29,15 @@ var issuesArray = [
 		  up: 3,
 		  down: 8
 	  },
-	  date_created: "01/01/2015"
+	  date_created: "20150101"
+	}, {
+	  title: "issue002",
+	  content: "ut also the leap into electronic t",
+	  votes: {
+		  up: 45,
+		  down: 21
+	  },
+	  date_created: "20150201"
 	}, {
 	  title: "issue003",
 	  content: "Latin words, consectetur, from a Lore",
@@ -37,7 +45,7 @@ var issuesArray = [
 	    up: 32,
 	    down: 811
 	  },
-	  date_created: "03/01/2015"
+	  date_created: "20150301"
 	}, {
 		title: 'issue004', 
 		content: 'I approve of testing. Let us do more!', 
@@ -45,7 +53,7 @@ var issuesArray = [
 			up: 1,
 			down: 0
 		},
-		date_created: '05/11/2015'
+		date_created: '20150511'
 	}
 ];
 	
