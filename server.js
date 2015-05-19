@@ -16,6 +16,8 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/irepresent_dev
 
 app.use(passport.initialize());
 
+require('./lib/passport_strat')(passport);
+
 require('./routes/auth_routes')(usersRoutes, passport);
 require('./routes/issues_routes')(issuesRoutes, passport);
 
