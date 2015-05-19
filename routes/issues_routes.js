@@ -44,7 +44,7 @@ module.exports = function(router) {
 
 				//Return sorted array
 				res.json({
-					success:true,
+					success: true,
 					msg: 'Newest sort feed returned',
 					data: issueArray
 				});
@@ -52,6 +52,10 @@ module.exports = function(router) {
 		} else { //Default of popular sort
 			console.log('popular sort');
 			//To do: Implement Emre's popular sort
+			res.json({
+					success: false,
+					msg: 'Finish me'
+				});
 		}
 
 		function getUserVote(issue) {
