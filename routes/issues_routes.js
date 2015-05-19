@@ -27,8 +27,11 @@ module.exports = function(router) {
 
 	router.get('/issues', function(req, res) {
 		var user = req.user;
-		console.log(user);
-		console.log(req.query);
+		if (req.query.sort === 'newest') { //Check if newest sort
+			console.log('newest sort');
+		} else { //Default of popular sort
+			console.log('popular sort');
+		}
 		res.json({
 			success: false, 
 			msg: 'Finish this part'

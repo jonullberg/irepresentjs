@@ -8,7 +8,6 @@ var chai = require('chai');
 var chaihttp = require('chai-http');
 chai.use(chaihttp);
 var expect = require('chai').expect;
-var Issue = require('../models/Issue');
 
 describe('issue REST api', function() {
 	var testToken;

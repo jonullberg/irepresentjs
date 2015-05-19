@@ -10,7 +10,7 @@ var issueSchema = mongoose.Schema({
 		up: Number,
 		down: Number
 	},
-	date_created: String
+	date_created: Number
 });
 
 module.exports = mongoose.model('Issue', issueSchema);
