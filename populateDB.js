@@ -15,7 +15,7 @@ var usersArray = [
 		password: 'password'
 	}, {
 		username: 'testuser2',
-		email: 'testuser3@example.com',
+		email: 'testuser2@example.com',
 		password: 'password'
 	}, {
 		username: 'testuser3',
