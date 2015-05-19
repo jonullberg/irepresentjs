@@ -1,7 +1,7 @@
 //Run with 'node populateDB.js' call
 'use strict';
 
-var process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
+process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
 
 var mongoose = require('mongoose');
 var User = require('./models/User');
