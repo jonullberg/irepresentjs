@@ -5,20 +5,33 @@ var bcrypt = require('bcrypt-nodejs');
 var eat = require('eat');
 
 var userSchema = mongoose.Schema({
-	username: String,
+	username: { type: String, unique: true, required: true },
 	basic: {
-		email: { type: String, unique: true },
-		password: String
-	},
-	
+		email: { type: String, unique: true, required: true },
+		password: { type: String, required: true }
+	}	
 });
 
 userSchema.methods.generateHash = function(password, callback) {
-	bcyrpt.genSalt(8, function(err, salt) {
+	bcrypt.genSalt(8, function(err, salt) {
 		bcrypt.hash(password, salt, null, function(err, hash) {
 			return callback(err, hash);
 		});
 	});
+};
+
+userSchema.methods.checkPassword = function(password, callback) {
+	bcrypt.compare(password, this.basic.password, function(err, res) {
+		return callback(err, res);
+	});
+};
+
+userSchema.methods.generateToken = function(secret, callback) {
+	eat.encode({ id: this._id }, secret, callback);
+};
+
+userSchema.methods.owns = function(obj) {
+	return obj.authorId === this._id;
 };
 
 module.exports = mongoose.model('User', userSchema);
