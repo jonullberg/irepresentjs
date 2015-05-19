@@ -1,7 +1,7 @@
 //Run with 'node dropDB.js' call
 'use strict';
 
-var process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
+process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
 var mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGOLAB_URI, function() {
