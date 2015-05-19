@@ -127,32 +127,13 @@ describe('The login API', function() {
 				});
 
 		});
-		it('Should give an error if logging in with no password', function(done) {
-			chai.request(app)
-				.get('/sign_in')
-				.auth('unique@example.com')
-				.end(function(err, res) {
-					console.log(res);
-					expect(res.body.success).to.equal(false);
-					expect(res.error.msg).to.equal('Error generating token');
-					done();
-				});
-
-		});
-		it('Should give an error if trying to log-in with no email', function(done) {
-			chai.request(app)
-				.get('/sign_in')
-				.auth('unique@example.com', 'foobar123')
-				.end(function(err, res) {	// Need to update
-					done();
-				});
-
-		});
 		it('Should give an error if logging in with an invalid email', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar123')
-				.end(function(err, res) {	// Need to update
+				.auth('wrong@example.com', 'foobar123')
+				.end(function(err, res) {
+					expect(res.error.text).to.equal('No such user\n');
+					expect(res).to.have.status(500);
 					done();
 				});
 
@@ -160,8 +141,10 @@ describe('The login API', function() {
 		it('Should give an error if logging in with a correct username and not an email', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar123')
+				.auth('testUser', 'foobar123')
 				.end(function(err, res) {	// Need to update
+					expect(res.error.text).to.equal('No such user\n');
+					expect(res).to.have.status(500);
 					done();
 				});
 		});
