@@ -17,7 +17,7 @@ describe('issue REST api', function() {
 
 	it('should save a new issue with a post request', function(done) {
 		
-		var testUser = {id: 'test ID here', token: 'test token here'};
+		var testToken = {token: 'test token here'};
 		var testIssue = {
 			title: 'Test Title', 
 			content: 'I approve of testing. Let us do more!', 
@@ -28,7 +28,8 @@ describe('issue REST api', function() {
 
 		chai.request('localhost:3000')
 			.post('/api/issues')
-			.send({user: testUser, issue: testIssue})
+			.set({'eat': testToken})
+			.send({issue: testIssue})
 			.end(function(err, res) {
 				expect(err).to.eql(null);
 				expect(res.body.success).to.eql(true);
