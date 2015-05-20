@@ -24,8 +24,14 @@ describe('Issues REST api', function() {
 			})
 			.end(function(err, res) {
 				testToken = res.body.data.token;
-				return testToken, done();
+				done();
 			}); 
+	});
+	
+	after(function(done) {
+		mongoose.connection.db.dropDatabase(function() {
+			done();
+		});
 	});
 
 	describe('Creating new issues', function() {
@@ -47,7 +53,7 @@ describe('Issues REST api', function() {
 					expect(res.body.success).to.eql(true);
 					expect(res.body.msg).to.eql('New Issue Created');
 					testIssueId = res.body.data.id;
-					return testIssueId, done();
+					done();
 				});
 		});
 	});
@@ -62,11 +68,6 @@ describe('Issues REST api', function() {
 					expect(res.body.msg).to.equal('Recorded a yes vote for this issue');
 					done();
 				});
-		});
-	});
-	after(function(done) {
-		mongoose.connection.db.dropDatabase(function() {
-			done();
 		});
 	});
 });

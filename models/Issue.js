@@ -6,7 +6,7 @@ var issueSchema = mongoose.Schema({
 	author_id: String,
 	title: String,
 	content: String,
-	votes: {
+	votes: { type: Object,
 		up: {type: Number},
 		down: {type: Number}
 	},
