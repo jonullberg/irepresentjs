@@ -1,11 +1,16 @@
 'use strict';
 
 var bodyparser = require('body-parser');
-var Issue = require('../models/Issue');
 var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
+var Issue = require('../models/Issue');
+var Vote = require('../models/Vote');
 
 module.exports = function(router) {
 	router.use(bodyparser.json());
+
+	//Jonathan
+	//Redo this new issue code to call issue.add method
+	//This method should add a new vote as well
 
 	router.post('/issues', eatAuth, function(req, res) {
 		var newIssue = new Issue(req.body.issue);
@@ -30,6 +35,12 @@ module.exports = function(router) {
 
 	router.get('/issues', eatAuth, function(req, res) {
 
+		//Emre
+		//Do sort based on query
+		//Call tallyVotes (Eeshan to write this method)
+		//Send data to Randy via res
+		//Below is old code
+
 		if (req.query.sort === 'newest') { //Check if newest sort
 			console.log('newest sort');
 			Issue.aggregate([
@@ -53,12 +64,26 @@ module.exports = function(router) {
 				});
 			});
 		} else { //Default of popular sort
-			console.log('popular sort');
-			//To do: Implement Emre's popular sort
-			res.json({
-					success: false,
-					msg: 'Finish me'
+			Issue.aggregate([
+				{ $sort: { 'votes.total': 1 } }
+			], function(err, issueArray) {
+				if(err) {
+					console.log(err);
+					return res.status(500).json({
+						success: false, 
+						msg: 'internal server error'
+					});
+				}
+				//Add user vote to sorted array
+				issueArray.forEach(getUserVote);
+
+				//Return sorted array
+				res.json({
+					success: true,
+					msg: 'Popular sort feed returned',
+					data: issueArray
 				});
+			});
 		}
 		
 		function getUserVote(issue) {
@@ -69,6 +94,26 @@ module.exports = function(router) {
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {
+
+		//Jonathan
+		//Redo this to add a new Vote
+
+		Issue.findOne({ _id: req.params.id }, function(err, issue) {
+			issue.updateVote(req.body.vote, function(err, data) {
+				if (err) {
+					console.log(err);
+					return res.status(500).json({
+						'success': false,
+						'msg': 'Failed to record vote'
+					});
+				}
+				return res.json({
+					'success': true,
+					'msg': 'Recorded ' + data + ' vote'
+				});
+			});
+		});
+
 		if(req.body.vote === 'yes') {
 			Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.up': 1 }}, {upsert: true, 'new': true}, function(err, issue) {
 					if(err) {

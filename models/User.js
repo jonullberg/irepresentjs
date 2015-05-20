@@ -9,8 +9,7 @@ var userSchema = mongoose.Schema({
 	'basic': {
 		'email': { type: String, unique: true, required: true },
 		'password': { type: String, required: true }
-	},
-	'votes': { type: Object }
+	}
 });
 
 userSchema.methods.generateHash = function(password, callback) {
@@ -29,10 +28,6 @@ userSchema.methods.checkPassword = function(password, callback) {
 
 userSchema.methods.generateToken = function(secret, callback) {
 	eat.encode({ id: this._id }, secret, callback);
-};
-
-userSchema.methods.getUserVote = function(issue_id) {
-	return this.votes[issue_id];
 };
 
 module.exports = mongoose.model('User', userSchema);

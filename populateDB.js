@@ -68,7 +68,7 @@ function createUsers(usersArray, callback) {
 		saveUser(userObj, function(user) {
 			console.log(user.username + ' created');
 			checkCount(user);
-		})
+		});
 	});
 
 	function checkCount(user) {
@@ -89,7 +89,7 @@ function createIssues(issuesArray, callback) {
 		saveIssue(issueObj, testUser, function() {
 			console.log(issueObj.title + ' created');
 			checkCount();
-		})
+		});
 	});
 
 	function checkCount() {
@@ -124,7 +124,7 @@ function saveIssue(issue, user, callback) {
 	newIssue.save(function(err, data) {
 		if (err) { console.log('Could not save issue: ' + err); }
 		callback(data);
-	})
+	});
 }
 
 mongoose.connect(process.env.MONGOLAB_URI, function() {
