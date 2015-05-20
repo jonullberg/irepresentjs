@@ -31,4 +31,8 @@ userSchema.methods.generateToken = function(secret, callback) {
 	eat.encode({ id: this._id }, secret, callback);
 };
 
+userSchema.methods.getUserVote = function(issue_id) {
+	return this.votes[issue_id];
+};
+
 module.exports = mongoose.model('User', userSchema);
