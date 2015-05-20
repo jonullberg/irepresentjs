@@ -6,7 +6,7 @@ var mocha = require('gulp-mocha');
 var stylish = require('jshint-stylish');
 var nodemon = require('nodemon');
 
-var workingFiles = ['lib/**.js', 'models/**.js', 'tests/**.js', 'routes/**.js', 'server.js', 'gulpfile.js'];
+var workingFiles = ['lib/**.js', 'models/**.js', 'test/**.js', 'routes/**.js', 'server.js', 'gulpfile.js', 'populateDB.js', 'dropDB.js'];
 
 gulp.task('nodemon', function() {
 	nodemon({
@@ -29,7 +29,7 @@ gulp.task('test', function() {
 		ul: 'bdd',
 		globals: ['should']
 	};
-	return gulp.src('tests/**.js', options)
+	return gulp.src('test/**.js', options)
 		.pipe(mocha({reporter: 'nyan'}));
 });
 

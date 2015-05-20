@@ -40,7 +40,7 @@ describe('Issues REST api', function() {
 				title: 'Test Title', 
 				content: 'I approve of testing. Let us do more!', 
 				votes: {up: 1, down: 0},
-				date_created: 11052015
+				date_created: 20150511
 			};
 			chai.request(app)
 				.post('/issues')
