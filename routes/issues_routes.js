@@ -2,7 +2,7 @@
 
 var bodyparser = require('body-parser');
 var Issue = require('../models/Issue');
-var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET)
+var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 
 module.exports = function(router) {
 	router.use(bodyparser.json());
