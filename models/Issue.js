@@ -3,19 +3,24 @@
 var mongoose = require('mongoose');
 
 var issueSchema = mongoose.Schema({
-	author_id: String,
 	title: String,
 	content: String,
-	votes: { type: Object,
-		up: {type: Number},
-		down: {type: Number},
-		total: {type: Number}
-	},
+	author_id: String,
 	date_created: Number
 });
 
-issueSchema.methods.updateVoteTotal = function() {
-	this.votes.total = this.votes.up + this.votes.down ;
+issueSchema.methods.add = function() {
+	//Jonathan
+	//Fill me in based on what Randy is sending us
+};
+
+issueSchema.methods.tallyVotes = function(user_id) {
+	//Eeshan
+	//Tally votes from vote db
+	//this.votes_up
+	//this.votes_down
+	//this.votes_total
+	//this.user_vote (Boolean) Undefined if not vote
 };
 
 module.exports = mongoose.model('Issue', issueSchema);
