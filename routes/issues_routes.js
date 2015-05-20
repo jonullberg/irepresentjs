@@ -107,7 +107,7 @@ module.exports = function(router) {
 		newVote.user_id = req.user.id;
 		if(req.body.vote === undefined) newVote.vote = null;
 		if(req.body.vote === 'yes') newVote.vote = true;
-		newVote.vote = false;
+		if(req.body.vote === 'no') newVote.vote = false;
 
 		newVote.save(function(err, vote) {
 			if(err) {
