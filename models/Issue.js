@@ -7,8 +7,8 @@ var issueSchema = mongoose.Schema({
 	title: String,
 	content: String,
 	votes: {
-		up: Number,
-		down: Number
+		up: {type: Number},
+		down: {type: Number}
 	},
 	date_created: Number
 });

@@ -20,12 +20,15 @@ module.exports = function(router) {
 			}
 			res.json({
 				success: true, 
-				msg: 'New Issue Created'
+				msg: 'New Issue Created',
+				data: {
+					id: data._id
+				}
 			});
 		});
 	});
 
-	router.get('/issues', function(req, res) {
+	router.get('/issues', eatAuth, function(req, res) {
 		var user = req.user;
 		if (req.query.sort === 'newest') { //Check if newest sort
 			console.log('newest sort');
@@ -36,5 +39,42 @@ module.exports = function(router) {
 			success: false, 
 			msg: 'Finish this part'
 		});
+	});
+
+	router.put('/issues/:id', eatAuth, function(req, res) {
+		if(req.body.vote === 'yes') {
+			Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.up': 1 }}, {upsert: true, 'new': true}, function(err, issue) {
+					if(err) {
+						console.log(err);
+						return res.status(500).json({
+							'success': false,
+							'msg': 'Failed to record vote'
+						});
+					}
+					return res.json({
+						'success': true,
+						'msg': 'Recorded a yes vote for this issue'
+					});
+				});
+		} else {
+			Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.down': 1 }}, {upsert: true }, 
+				function(err, issue) {
+					console.log(issue);
+					if(err) {
+						console.log(err);
+						return res.status(500).json({
+							'success': false,
+							'msg': 'Failed to record a vote'
+						});
+					}
+
+					return res.json({
+						'success': true,
+						'msg': 'Recorded a yes vote for this issue'
+					});
+
+				});
+
+		}
 	});
 };
