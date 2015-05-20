@@ -49,21 +49,8 @@ describe('Issues REST api', function() {
 				.end(function(err, res) {
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
-					expect(res.body.msg).to.eql('New Issue Created');
+					expect(res.body.msg).to.eql('You successfully saved a vote and issue');
 					testIssueId = res.body.data.id;
-					done();
-				});
-		});
-	});
-
-	describe('Voting on an issue', function() {
-		it('Should increment a vote tally', function(done) {
-			chai.request(app)
-				.put('/issues/' + testIssueId)
-				.send({ vote: 'yes', 'eat': testToken })
-				.end(function(err, res) {
-					expect(err).to.equal(null);
-					expect(res.body.msg).to.equal('Recorded a yes vote for this issue');
 					done();
 				});
 		});
