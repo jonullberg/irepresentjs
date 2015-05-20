@@ -6,13 +6,8 @@ var issueSchema = mongoose.Schema({
 	title: String,
 	content: String,
 	author_id: String,
-	date_created: Number
+	date_created: Date
 });
-
-issueSchema.methods.add = function() {
-	//Jonathan
-	//Fill me in based on what Randy is sending us
-};
 
 issueSchema.methods.tallyVotes = function(user_id) {
 	//Eeshan
