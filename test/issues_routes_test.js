@@ -35,7 +35,6 @@ describe('Issues REST api', function() {
 	});
 
 	describe('Creating new issues', function() {
-	
 		it('should save a new issue with a post request', function(done) {
 			var testIssue = {
 				title: 'Test Title', 
@@ -43,7 +42,6 @@ describe('Issues REST api', function() {
 				votes: {up: 1, down: 0},
 				date_created: 11052015
 			};
-
 			chai.request(app)
 				.post('/issues')
 				.set({'eat': testToken})
@@ -66,6 +64,36 @@ describe('Issues REST api', function() {
 				.end(function(err, res) {
 					expect(err).to.equal(null);
 					expect(res.body.msg).to.equal('Recorded a yes vote for this issue');
+					done();
+				});
+		});
+	});
+
+	describe('Getting the different issue feeds', function() {
+		it('should get an array of issues on a get request (sort = default)', function(done) {
+			chai.request('localhost:3000')
+				.get('/issues')
+				.set({eat: testToken})
+				.end(function(err, res) {
+					//These should fail for now
+					expect(err).to.eql(null);
+					expect(res.body.success).to.eql(true);
+					expect(res.body.msg).to.eql('Popular sort feed returned');
+					expect(Array.isArray(res.body.data)).to.eql(true);
+					done();
+				});
+		});
+
+		it('should get an array of issues on a get request (sort = newest)', function(done) {
+			chai.request('localhost:3000')
+				.get('/issues')
+				.query({sort: 'newest'})
+				.set({eat: testToken})
+				.end(function(err, res) {
+					expect(err).to.eql(null);
+					expect(res.body.success).to.eql(true);
+					expect(res.body.msg).to.eql('Newest sort feed returned');
+					expect(Array.isArray(res.body.data)).to.eql(true);
 					done();
 				});
 		});
