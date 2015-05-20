@@ -24,14 +24,8 @@ describe('Issues REST api', function() {
 			})
 			.end(function(err, res) {
 				testToken = res.body.data.token;
-				done();
+				return testToken, done();
 			}); 
-	});
-	
-	after(function(done) {
-		mongoose.connection.db.dropDatabase(function() {
-			done();
-		});
 	});
 
 	describe('Creating new issues', function() {
@@ -46,14 +40,15 @@ describe('Issues REST api', function() {
 
 			chai.request(app)
 				.post('/issues')
-				.set({'eat': testToken})
+				.set({'token': testToken})
 				.send({issue: testIssue})
 				.end(function(err, res) {
+					console.log(res);
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
 					expect(res.body.msg).to.eql('New Issue Created');
 					testIssueId = res.body.data.id;
-					done();
+					return testIssueId, done();
 				});
 		});
 	});
@@ -62,7 +57,8 @@ describe('Issues REST api', function() {
 		it('Should increment a vote tally', function(done) {
 			chai.request(app)
 				.put('/issues/' + testIssueId)
-				.send({ vote: 'yes', 'eat': testToken })
+				.set({ 'token': testToken })
+				.send({ vote: 'yes' })
 				.end(function(err, res) {
 					expect(err).to.equal(null);
 					expect(res.body.msg).to.equal('Recorded a yes vote for this issue');
@@ -70,4 +66,10 @@ describe('Issues REST api', function() {
 				});
 		});
 	});
+	// after(function(done) {
+	// 	mongoose.connection.db.dropDatabase(function() {
+	// 		done();
+	// 	});
+	// });
+
 });
