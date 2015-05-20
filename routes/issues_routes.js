@@ -53,8 +53,16 @@ module.exports = function(router) {
 						msg: 'internal server error'
 					});
 				}
+				console.log(issueArray);
 				//Add user vote to sorted array
-				issueArray.forEach(getUserVote);
+				issueArray.forEach(function(issue) {
+					Issue.findOne({_id: issue._id}, function(err, oneIssue) {
+						oneIssue.tallyVotes(issue, req.user._id);
+						console.log(issue);
+					})
+				});
+				console.log('Added tallies');
+				console.log(issueArray);
 
 				//Return sorted array
 				res.json({
@@ -64,33 +72,12 @@ module.exports = function(router) {
 				});
 			});
 		} else { //Default of popular sort
-			Issue.aggregate([
-				{ $sort: { 'votes.total': 1 } }
-			], function(err, issueArray) {
-				if(err) {
-					console.log(err);
-					return res.status(500).json({
-						success: false, 
-						msg: 'internal server error'
-					});
-				}
-				//Add user vote to sorted array
-				issueArray.forEach(getUserVote);
-
-				//Return sorted array
-				res.json({
-					success: true,
-					msg: 'Popular sort feed returned',
-					data: issueArray
-				});
+			//Return sorted array
+			res.json({
+				success: true,
+				msg: 'Popular sort feed returned'
 			});
 		}
-		
-		function getUserVote(issue) {
-			var userVote = req.user.getUserVote(issue._id);
-			if (userVote === undefined) { return; }
-			issue.user_vote = userVote;
- 		}
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {

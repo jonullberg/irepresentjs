@@ -28,34 +28,18 @@ var issuesArray = [
 	{
 	  title: "issue001",
 	  content: "imply dummy text of the printing",
-	  votes: {
-		  up: 3,
-		  down: 8
-	  },
 	  date_created: "20150101"
 	}, {
 	  title: "issue002",
 	  content: "ut also the leap into electronic t",
-	  votes: {
-		  up: 45,
-		  down: 21
-	  },
 	  date_created: "20150201"
 	}, {
 	  title: "issue003",
 	  content: "Latin words, consectetur, from a Lore",
-	  votes: {
-	    up: 32,
-	    down: 811
-	  },
 	  date_created: "20150301"
 	}, {
 		title: 'issue004', 
-		content: 'I approve of testing. Let us do more!', 
-		votes: {
-			up: 1,
-			down: 0
-		},
+		content: 'I approve of testing. Let us do more!',
 		date_created: '20150511'
 	}
 ];
