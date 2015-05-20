@@ -24,10 +24,10 @@ describe('The login API', function() {
 				})
 				.end(function(err, res) {
 					expect(err).to.equal(null);
-					expect(res.body['success']).to.equal(true);
+					expect(res.body.success).to.equal(true);
 					expect(res).to.have.status(200);
-					expect(res.body['msg']).to.equal('You have successfully created a user');
-					expect(res.body['data']).to.have.property('token');
+					expect(res.body.msg).to.equal('You have successfully created a user');
+					expect(res.body.data).to.have.property('token');
 					done();
 				});
 		});
@@ -39,9 +39,9 @@ describe('The login API', function() {
 					'email': 'unique4@example.com'
 				})
 				.end(function(err, res) {
-					expect(res.body['success']).to.equal(false);
+					expect(res.body.success).to.equal(false);
 					expect(res).to.have.status(401);
-					expect(res.body['msg']).to.equal('No password submitted');
+					expect(res.body.msg).to.equal('No password submitted');
 					done();
 				});
 		});
@@ -53,9 +53,9 @@ describe('The login API', function() {
 					'password': 'foobar123'
 				})
 				.end(function(err, res) {
-					expect(res.body['success']).to.equal(false);
+					expect(res.body.success).to.equal(false);
 					expect(res).to.have.status(500);
-					expect(res.body['msg']).to.equal('Could not create user');
+					expect(res.body.msg).to.equal('Could not create user');
 					done();
 				});
 		});
@@ -81,9 +81,9 @@ describe('The login API', function() {
 						'password': 'foobar123'
 					})
 					.end(function(err, res) {
-						expect(res.body['success']).to.equal(false);
+						expect(res.body.success).to.equal(false);
 						expect(res).to.have.status(500);
-						expect(res.body['msg']).to.equal('Could not create user');
+						expect(res.body.msg).to.equal('Could not create user');
 						done();
 					});
 			});
@@ -96,9 +96,9 @@ describe('The login API', function() {
 						'password': 'foobar123'
 					})
 					.end(function(err, res) {
-						expect(res.body['success']).to.equal(false);
+						expect(res.body.success).to.equal(false);
 						expect(res).to.have.status(500);
-						expect(res.body['msg']).to.equal('Could not create user');
+						expect(res.body.msg).to.equal('Could not create user');
 						done();
 					});
 			});
