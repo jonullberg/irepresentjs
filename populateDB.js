@@ -6,6 +6,7 @@ process.env.MONGOLAB_URI = 'mongodb://localhost/irepresent_dev';
 var mongoose = require('mongoose');
 var User = require('./models/User');
 var Issue = require('./models/Issue');
+var Vote = require('./models/Vote');
 var testUser;
 
 var usersArray = [
@@ -43,7 +44,7 @@ var issuesArray = [
 		date_created: '20150511'
 	}
 ];
-	
+
 function createUsers(usersArray, callback) {
 	var total = usersArray.length;
 	var count = 0;
@@ -70,9 +71,18 @@ function createIssues(issuesArray, callback) {
 	var count = 0;
 
 	issuesArray.forEach(function(issueObj) {
-		saveIssue(issueObj, testUser, function() {
+		saveIssue(issueObj, testUser, function(savedIssue) {
 			console.log(issueObj.title + ' created');
-			checkCount();
+			var newVote = new Vote({
+				issue_id: savedIssue._id,
+				user_id: testUser._id,
+				vote: true
+			});
+			newVote.save(function(err, data) {
+				if (err) { console.log('Could not save vote: ' + err); }
+				console.log('Saved vote for issue: ' + data.issue_id + ' and user: ' + data.user_id);
+				checkCount();
+			})
 		});
 	});
 

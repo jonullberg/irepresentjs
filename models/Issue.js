@@ -7,18 +7,32 @@ var issueSchema = mongoose.Schema({
 	title: String,
 	content: String,
 	author_id: String,
-	date_created: Number
+	date_created: Date
 });
 
-issueSchema.methods.add = function() {
-	//Jonathan
-	//Fill me in based on what Randy is sending us
-};
+issueSchema.methods.tallyVotes = function(issue, user_id, callback) {
+	var total = 3;
+	var count = 0;
+	Vote.count({ 'issue_id': this._id, 'vote': true }, function (err, count) {
+		issue.votes_up = count;
+		runCallback();
+	});
+	Vote.count({ 'issue_id': this._id, 'vote': false }, function (err, count) {
+		issue.votes_down = count;
+		runCallback();
+	});
+	Vote.count({ 'issue_id': this._id }, function (err, count) {
+		issue.votes_total = count;
+		runCallback();
+	});
 
-issueSchema.methods.tallyVotes = function(issue, user_id) {
-	issue.votes_up = Vote.where({ 'issue_id': this._id, 'vote': true }).count();
-	issue.votes_down = Vote.where({ 'issue_id': this._id, 'vote': false }).count();
-	issue.votes_total = Vote.where({ 'issue_id': this._id }).count();
+	function runCallback() {
+		count++;
+		if (count === total) {
+			console.log(issue);
+			// callback();
+		}
+	}
 	//this.user_vote (Boolean) Undefined if not vote
 };
 
