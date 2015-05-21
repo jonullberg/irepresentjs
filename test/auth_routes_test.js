@@ -139,7 +139,7 @@ describe('The login API', function() {
 				});
 
 		});
-		it.skip('Should give an error if logging in with a correct username and not an email', function(done) {
+		it('Should give an error if logging in with a correct username and not an email', function(done) {
 			chai.request(app)
 				.get('/sign_in')
 				.auth('testUser', 'foobar123')
