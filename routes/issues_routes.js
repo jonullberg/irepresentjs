@@ -5,7 +5,7 @@ var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 var Issue = require('../models/Issue');
 var Vote = require('../models/Vote');
 var sort = require('../lib/popularitySort');
-var randalizeDate = require('../lib/randalizeDate');
+var randalizeIssue = require('../lib/randalizeIssue');
 
 module.exports = function(router) {
 	router.use(bodyparser.json());
@@ -57,44 +57,29 @@ module.exports = function(router) {
 						msg: 'internal server error'
 					});
 				}
-				//Add user vote to sorted array
+
+				//Randalize each issue in array
 				issueArray.forEach(function(issue) {
-					var total = 3;
-					var count = 0;
-					issue.date_created = randalizeDate(issue.date_created);
-					Vote.count({ 'issue_id': issue._id, 'vote': true }, function (err, count) {
-						issue.votes_up = count;
-						runCallback();
+					randalizeIssue(issue, req.user_id, function() {
+						functionAfterForEach();
 					});
-					Vote.count({ 'issue_id': issue._id, 'vote': false }, function (err, count) {
-						issue.votes_down = count;
-						runCallback();
-					});
-					Vote.count({ 'issue_id': issue._id }, function (err, count) {
-						issue.votes_total = count;
-						runCallback();
-					});
-					function runCallback() {
-						count++;
-						if (count === total) {
-							functionAfterForEach();
-						}
-					}
 				});
 
-				var total = issueArray.length;
-				var count = 0;
+				var issueArrayCount = 0;
+
 				function functionAfterForEach() {	
-					count++;
-					if (count === total) {
+					issueArrayCount++;
+
+					//If all issues have been randalized
+					if (issueArrayCount === issueArray.length) {						
 						//Return sorted array
 						res.json({
 							success: true,
-							msg: 'Newest sort feed returned',
+							msg: 'Popular sort feed returned',
 							data: issueArray
 						});
 					}
-				};
+				}
 			});
 		} else { //Default of popular sort
 			console.log('popular sort');
@@ -106,38 +91,25 @@ module.exports = function(router) {
 						msg: 'internal server error'
 					});
 				}
-				//Add user vote to array
+
+				//Randalize each issue in array
 				issueArray.forEach(function(issue) {
-					var total = 3;
-					var forEachCount = 0;
-					issue.date_created = randalizeDate(issue.date_created);
-					Vote.count({ 'issue_id': issue._id, 'vote': true }, function (err, count) {
-						issue.votes_up = count;
-						runCallback();
+					randalizeIssue(issue, req.user_id, function() {
+						functionAfterForEach();
 					});
-					Vote.count({ 'issue_id': issue._id, 'vote': false }, function (err, count) {
-						issue.votes_down = count;
-						runCallback();
-					});
-					Vote.count({ 'issue_id': issue._id }, function (err, count) {
-						issue.votes_total = count;
-						runCallback();
-					});
-					function runCallback() {
-						forEachCount++;
-						if (forEachCount === total) {
-							functionAfterForEach();
-						}
-					}
 				});
 
-				var total = issueArray.length;
 				var issueArrayCount = 0;
+
 				function functionAfterForEach() {	
 					issueArrayCount++;
-					if (issueArrayCount === total) {
+
+					//If all issues have been randalized
+					if (issueArrayCount === issueArray.length) {
+						
 						//Sort array via popularity sort
 						issueArray = sort(issueArray);
+						
 						//Return sorted array
 						res.json({
 							success: true,
@@ -145,13 +117,13 @@ module.exports = function(router) {
 							data: issueArray
 						});
 					}
-				};
+				}
 			});
 		}
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {		
-	var newVote = new Vote();
+		var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
 		if(req.body.vote === 'yes') newVote.vote = true;
@@ -170,6 +142,5 @@ module.exports = function(router) {
 				'msg': 'You successfully voted for this issue'
 			});
 		});
-
 	});
 };
