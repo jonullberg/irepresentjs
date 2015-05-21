@@ -97,7 +97,7 @@ describe('The login API', function() {
 		it('Should be able to log-in a user with a password', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar123')
+				.auth('test@example.com', 'foobar123')
 				.end(function(err, res) {
 					expect(res.body.success).to.equal(true);
 					expect(res.body.msg).to.equal('You successfully logged in');
@@ -108,7 +108,7 @@ describe('The login API', function() {
 		it('Should give an error if logging in with the wrong password', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar124')
+				.auth('test@example.com', 'foobar124')
 				.end(function(err, res) {
 					expect(res.error.text).to.equal('Wrong Password\n');
 					done();

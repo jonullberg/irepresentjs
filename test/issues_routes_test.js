@@ -27,6 +27,18 @@ describe('Issues REST api', function() {
 				done();
 			}); 
 	});
+	before(function(done) {
+		chai.request(app)
+			.post('/issues')
+			.set({ 'eat': testToken })
+			.send({ 'title': 'Test issue',
+				'content': 'This is a test issue'
+			})
+			.end(function(err, res) {
+				testIssueId = res.body.data.id;
+				done();
+			});
+	});
 	
 	after(function(done) {
 		mongoose.connection.db.dropDatabase(function() {
@@ -48,7 +60,6 @@ describe('Issues REST api', function() {
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
 					expect(res.body.msg).to.eql('You successfully created an issue');
-					testIssueId = res.body.data.id;
 					done();
 				});
 		});
