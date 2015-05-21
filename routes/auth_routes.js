@@ -9,7 +9,6 @@ module.exports = function(router, passport) {
 
 	router.post('/users', function(req, res) {
 		var newUserData = JSON.parse(JSON.stringify(req.body));
-		console.log(req.body);
 		delete newUserData.email;
 		delete newUserData.password;
 		var newUser = new User(newUserData);
