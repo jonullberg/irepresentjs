@@ -128,7 +128,7 @@ function saveIssue(issue, user, callback) {
 			return callback(err);
 		}
 		console.log(data.title + ' issue created');
-		saveVote(issue._id, user._id, true, callback);
+		saveVote(data._id, user._id, true, callback);
 	});
 }
 
