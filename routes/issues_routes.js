@@ -151,7 +151,6 @@ module.exports = function(router) {
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {
-		// if()
 		var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
