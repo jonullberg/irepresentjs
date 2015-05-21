@@ -161,7 +161,7 @@ module.exports = function(router) {
 		if(req.body.vote === 'yes') {
 			newVote.vote = true;
 		}
-		req.body.vote = false;
+		newVote.vote = false;
 
 		newVote.save(function(err, vote) {
 			if(err) {
