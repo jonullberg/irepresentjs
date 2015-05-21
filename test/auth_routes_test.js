@@ -19,7 +19,7 @@ describe('The login API', function() {
 				.post('/users')
 				.send({
 					username: 'testUser', 
-					email: 'unique@example.com', 
+					email: 'test@example.com', 
 					password: 'foobar123' 
 				})
 				.end(function(err, res) {
@@ -80,7 +80,7 @@ describe('The login API', function() {
 					.post('/users')
 					.send({
 						'username': 'testUser3',
-						'email': 'unique@example.com',
+						'email': 'test@example.com',
 						'password': 'foobar123'
 					})
 					.end(function(err, res) {

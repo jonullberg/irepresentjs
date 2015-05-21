@@ -24,7 +24,7 @@ describe('Issues REST api', function() {
 			})
 			.end(function(err, res) {
 				testToken = res.body.data.token;
-				return testToken, done();
+				done();
 			}); 
 	});
 	
