@@ -23,7 +23,6 @@ describe('The login API', function() {
 					'password': 'foobar123' 
 				})
 				.end(function(err, res) {
-					console.log(res.body);
 					expect(err).to.equal(null);
 					expect(res.body.success).to.equal(true);
 					expect(res).to.have.status(200);
