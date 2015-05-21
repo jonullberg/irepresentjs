@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var Vote = require('./Vote');
 
 var issueSchema = mongoose.Schema({
 	title: String,
@@ -9,12 +10,29 @@ var issueSchema = mongoose.Schema({
 	date_created: Date
 });
 
-issueSchema.methods.tallyVotes = function(user_id) {
-	//Eeshan
-	//Tally votes from vote db
-	//this.votes_up
-	//this.votes_down
-	//this.votes_total
+issueSchema.methods.tallyVotes = function(issue, user_id, callback) {
+	var total = 3;
+	var count = 0;
+	Vote.count({ 'issue_id': this._id, 'vote': true }, function (err, count) {
+		issue.votes_up = count;
+		runCallback();
+	});
+	Vote.count({ 'issue_id': this._id, 'vote': false }, function (err, count) {
+		issue.votes_down = count;
+		runCallback();
+	});
+	Vote.count({ 'issue_id': this._id }, function (err, count) {
+		issue.votes_total = count;
+		runCallback();
+	});
+
+	function runCallback() {
+		count++;
+		if (count === total) {
+			console.log(issue);
+			// callback();
+		}
+	}
 	//this.user_vote (Boolean) Undefined if not vote
 };
 
