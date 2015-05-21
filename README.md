@@ -1,5 +1,4 @@
 
-
 #**iRepresent** — App-athy is an Issue™
 
 iRepresent is an app that allows users to harness the collective voting power of their community. They can easily raise public awareness and bring issues to light as well as show their support by voting for or against other outstanding stuff.
