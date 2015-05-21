@@ -9,7 +9,7 @@ describe('sort functions', function() {
 		it('should take an array', function() {
 			var array = [];
 			var sorted = sort(array);
-			expect(array).to.eql([]);
+			expect(sorted).to.eql([]);
 		});
 		
 		it('should like sort stuff "decrementingly", you know?', function() {
