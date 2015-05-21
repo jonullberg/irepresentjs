@@ -8,7 +8,7 @@ describe('sort functions', function() {
 	describe('inputs', function() {
 		it('should take an array', function() {
 			var array = [];
-			sort(array, sort);
+			var sorted = sort(array);
 			expect(array).to.eql([]);
 		});
 		
@@ -17,13 +17,13 @@ describe('sort functions', function() {
 								 {votes_total: 3344}, 
 								 {votes_total: 933}];
 			var newArr = sort(arr);
-			expect(arr[0]).to.eql({votes_total: 3344});
+			expect(newArr[0]).to.eql({votes_total: 3344});
 		});
 
 		it('should return an array', function() {
 			var arr = [];
 			var newArr = sort(arr);
-			expect(arr).to.eql([]);
+			expect(newArr).to.eql([]);
 		});
 	});
 });
