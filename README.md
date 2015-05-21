@@ -3,8 +3,6 @@
 
 iRepresent is an app that allows users to harness the collective voting power of their community. They can easily raise public awareness and bring issues to light as well as show their support by voting for or against other outstanding stuff.
 
-Get it [FREE in the App Store](https://store.apple.com/iRepresent).
-
 ***
 > **NOTICE** — The endpoints outlined in this document are not designed for public use. This documentation outlines the application's consumption of these resources. All requests to, and responses from, these endpoints are handled automatically.
 
