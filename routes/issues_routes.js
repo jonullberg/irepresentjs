@@ -34,7 +34,7 @@ module.exports = function(router) {
 
 				return res.json({
 					'success': true,
-					'msg': 'You successfully saved a vote and issue',
+					'msg': 'You successfully created an issue',
 					'data': {
 						'id': issue._id
 					}

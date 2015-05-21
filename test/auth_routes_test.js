@@ -18,9 +18,9 @@ describe('The login API', function() {
 			chai.request(app)
 				.post('/users')
 				.send({
-					'username': 'testUser', 
-					'email': 'unique@example.com', 
-					'password': 'foobar123' 
+					username: 'testUser', 
+					email: 'unique@example.com', 
+					password: 'foobar123' 
 				})
 				.end(function(err, res) {
 					expect(err).to.equal(null);
@@ -60,23 +60,23 @@ describe('The login API', function() {
 				});
 		});
 		describe('Unique emails and usernames', function() {
-			before(function(done) {
-				chai.request(app)
-					.post('/users')
-					.send({
-						'username': 'testUser2',
-						'email': 'unique2@example.com',
-						'password': 'foobar123'
-					})
-					.end(function() {
-						done();
-					});
-			});
+			// before(function(done) {
+			// 	chai.request(app)
+			// 		.post('/users')
+			// 		.send({
+			// 			'username': 'testUser2',
+			// 			'email': 'unique2@example.com',
+			// 			'password': 'foobar123'
+			// 		})
+			// 		.end(function() {
+			// 			done();
+			// 		});
+			// });
 			it('Should not be able to create a user with a non-unique username', function(done) {
 				chai.request(app)
 					.post('/users')
 					.send({
-						'username': 'testUser2',
+						'username': 'testUser',
 						'email': 'unique3@example.com',
 						'password': 'foobar123'
 					})
