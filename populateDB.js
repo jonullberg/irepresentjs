@@ -29,19 +29,19 @@ var issuesArray = [
 	{
 	  title: "issue001",
 	  content: "imply dummy text of the printing",
-	  date_created: "20150101"
+	  date_created: new Date(2013, 11, 11)
 	}, {
 	  title: "issue002",
 	  content: "ut also the leap into electronic t",
-	  date_created: "20150201"
+	  date_created: new Date(2010, 11, 11)
 	}, {
 	  title: "issue003",
 	  content: "Latin words, consectetur, from a Lore",
-	  date_created: "20150301"
+	  date_created: new Date(2015, 11, 11)
 	}, {
 		title: 'issue004', 
 		content: 'I approve of testing. Let us do more!',
-		date_created: '20150511'
+	  date_created: new Date(2011, 11, 11)
 	}
 ];
 

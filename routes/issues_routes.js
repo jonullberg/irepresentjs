@@ -4,7 +4,8 @@ var bodyparser = require('body-parser');
 var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 var Issue = require('../models/Issue');
 var Vote = require('../models/Vote');
-var popularitySort = require('../lib/popularitySort');
+var sort = require('../lib/popularitySort');
+var randalizeDate = require('../lib/randalizeDate');
 
 module.exports = function(router) {
 	router.use(bodyparser.json());
@@ -51,7 +52,7 @@ module.exports = function(router) {
 		if (req.query.sort === 'newest') { //Check if newest sort
 			console.log('newest sort');
 			Issue.aggregate([
-				{ $sort: { date_created: 1 } }
+				{ $sort: { date_created: -1 } }
 			], function(err, issueArray) {
 				if(err) {
 					console.log(err);
@@ -64,6 +65,7 @@ module.exports = function(router) {
 				issueArray.forEach(function(issue) {
 					var total = 3;
 					var count = 0;
+					issue.date_created = randalizeDate(issue.date_created);
 					Vote.count({ 'issue_id': issue._id, 'vote': true }, function (err, count) {
 						issue.votes_up = count;
 						runCallback();
@@ -99,27 +101,70 @@ module.exports = function(router) {
 				};
 			});
 		} else { //Default of popular sort
-			//Return sorted array
-			res.json({
-				success: true,
-				msg: 'Popular sort feed returned'
+			console.log('popular sort');
+			Issue.aggregate([{$project:{_id:1, 'title':'$title', 'content':'$content','date_created':'$date_created', 'author_id':'$author_id'}}], function(err, issueArray) {
+				if(err) {
+					console.log(err);
+					return res.status(500).json({
+						success: false, 
+						msg: 'internal server error'
+					});
+				}
+				//Add user vote to array
+				issueArray.forEach(function(issue) {
+					var total = 3;
+					var forEachCount = 0;
+					issue.date_created = randalizeDate(issue.date_created);
+					Vote.count({ 'issue_id': issue._id, 'vote': true }, function (err, count) {
+						issue.votes_up = count;
+						runCallback();
+					});
+					Vote.count({ 'issue_id': issue._id, 'vote': false }, function (err, count) {
+						issue.votes_down = count;
+						runCallback();
+					});
+					Vote.count({ 'issue_id': issue._id }, function (err, count) {
+						issue.votes_total = count;
+						runCallback();
+					});
+					function runCallback() {
+						forEachCount++;
+						if (forEachCount === total) {
+							functionAfterForEach();
+						}
+					}
+				});
+
+				var total = issueArray.length;
+				var issueArrayCount = 0;
+				function functionAfterForEach() {	
+					issueArrayCount++;
+					if (issueArrayCount === total) {
+						//Sort array via popularity sort
+						issueArray = sort(issueArray);
+						//Return sorted array
+						res.json({
+							success: true,
+							msg: 'Popular sort feed returned',
+							data: issueArray
+						});
+					}
+				};
 			});
 		}
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {
-
-		//Jonathan
-		//Redo this to add a new Vote
-
-
+		console.log(req.user);
 		var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
 		if(req.body.vote === 'yes') {
 			newVote.vote = true;
 		}
-		newVote.vote = false;
+		if(req.body.vote === 'no') {
+			newVote.vote = false;
+		}
 
 		newVote.save(function(err, vote) {
 			if(err) {
