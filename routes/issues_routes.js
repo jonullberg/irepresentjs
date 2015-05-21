@@ -155,16 +155,13 @@ module.exports = function(router) {
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {
-		console.log(req.user);
 		var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
 		if(req.body.vote === 'yes') {
 			newVote.vote = true;
 		}
-		if(req.body.vote === 'no') {
-			newVote.vote = false;
-		}
+		req.body.vote = false;
 
 		newVote.save(function(err, vote) {
 			if(err) {
