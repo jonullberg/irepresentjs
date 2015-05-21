@@ -13,9 +13,7 @@ describe('sort functions', function() {
 		});
 		
 		it('should like sort stuff "decrementingly", you know?', function() {
-			var arr = [{votes_total: 234}, 
-								 {votes_total: 3344}, 
-								 {votes_total: 933}];
+			var arr = [{votes_total: 234}, {votes_total: 3344}, {votes_total: 933}];
 			var newArr = sort(arr);
 			expect(newArr[0]).to.eql({votes_total: 3344});
 		});
