@@ -29,19 +29,27 @@ var issuesArray = [
 	{
 	  title: "issue001",
 	  content: "imply dummy text of the printing",
-	  date_created: new Date(2013, 11, 11)
+	  date_created: new Date(2013, 11, 11),
+	  up_votes: 10,
+	  down_votes: 2
 	}, {
 	  title: "issue002",
 	  content: "ut also the leap into electronic t",
-	  date_created: new Date(2010, 11, 11)
+	  date_created: new Date(2010, 11, 11),
+	  up_votes: 3,
+	  down_votes: 1
 	}, {
 	  title: "issue003",
 	  content: "Latin words, consectetur, from a Lore",
-	  date_created: new Date(2015, 11, 11)
+	  date_created: new Date(2015, 11, 11),
+	  up_votes: 50,
+	  down_votes: 4
 	}, {
 		title: 'issue004', 
 		content: 'I approve of testing. Let us do more!',
-	  date_created: new Date(2011, 11, 11)
+	  date_created: new Date(2011, 11, 11),
+	  up_votes: 5,
+	  down_votes: 30
 	}
 ];
 
@@ -101,9 +109,9 @@ function createIssues(issuesArray, callback) {
 
 	function checkCount(err, data) {
 		count++;
-		//Save an up vote
+		//Save votes
 		if (!err) {
-			createVotes(data._id, testUser._id, )
+			//Write a createVotes function that saves votes
 		}
 		if (count === total) {
 			callback();
@@ -119,25 +127,27 @@ function saveIssue(issue, user, callback) {
 			console.log('Could not save issue: ' + err);
 			return callback(err);
 		}
-		console.log(issueObj.title + ' created');
-		callback(null, data);
+		console.log(data.title + ' issue created');
+		saveVote(issue._id, user._id, true, callback);
 	});
 }
 
-function createVotes(issue._id, user._id, ) {
-
+function createVotes() {
+	//Write me
 }
 
-function saveVote(issue_id, user_id, vote) {
+function saveVote(issue_id, user_id, vote, callback) {
 	var newVote = new Vote({
-		issue_id: issue_id;
-		user_id: user_id;
+		issue_id: issue_id,
+		user_id: user_id,
 		vote: vote
 	});
 	newVote.save(function(err, data) {
-		if(err) { console.log('Could not save vote: ' + err); }
-		console.log('Saved vote for issue: ' + data.issue_id + ' and user: ' + data.user_id);
-		callback(data);
+		if(err) { 
+			console.log('Could not save vote: ' + err);
+			return callback(err);
+		}
+		callback(null, data);
 	});
 }
 
