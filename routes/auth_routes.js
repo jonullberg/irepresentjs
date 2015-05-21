@@ -47,6 +47,9 @@ module.exports = function(router, passport) {
 						});
 					}
 
+					// send a 'new user' confirmation email.
+					user.sendConfirmationEmail();
+
 					res.json({
 						'success': true,
 						'msg': 'You have successfully created a user',
