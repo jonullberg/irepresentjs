@@ -18,9 +18,9 @@ describe('The login API', function() {
 			chai.request(app)
 				.post('/users')
 				.send({
-					'username': 'testUser', 
-					'email': 'unique@example.com', 
-					'password': 'foobar123' 
+					username: 'testUser', 
+					email: 'test@example.com', 
+					password: 'foobar123' 
 				})
 				.end(function(err, res) {
 					expect(err).to.equal(null);
@@ -60,23 +60,11 @@ describe('The login API', function() {
 				});
 		});
 		describe('Unique emails and usernames', function() {
-			before(function(done) {
+			it('Should not be able to create a user with a repeated username', function(done) {
 				chai.request(app)
 					.post('/users')
 					.send({
-						'username': 'testUser2',
-						'email': 'unique2@example.com',
-						'password': 'foobar123'
-					})
-					.end(function() {
-						done();
-					});
-			});
-			it('Should not be able to create a user with a non-unique username', function(done) {
-				chai.request(app)
-					.post('/users')
-					.send({
-						'username': 'testUser2',
+						'username': 'testUser',
 						'email': 'unique3@example.com',
 						'password': 'foobar123'
 					})
@@ -87,12 +75,12 @@ describe('The login API', function() {
 						done();
 					});
 			});
-			it('Should not be able to create a user with a non-unique email', function(done) {
+			it('Should not be able to create a user with a repeated email', function(done) {
 				chai.request(app)
 					.post('/users')
 					.send({
 						'username': 'testUser3',
-						'email': 'unique2@example.com',
+						'email': 'test@example.com',
 						'password': 'foobar123'
 					})
 					.end(function(err, res) {
@@ -109,7 +97,7 @@ describe('The login API', function() {
 		it('Should be able to log-in a user with a password', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar123')
+				.auth('test@example.com', 'foobar123')
 				.end(function(err, res) {
 					expect(res.body.success).to.equal(true);
 					expect(res.body.msg).to.equal('You successfully logged in');
@@ -120,7 +108,7 @@ describe('The login API', function() {
 		it('Should give an error if logging in with the wrong password', function(done) {
 			chai.request(app)
 				.get('/sign_in')
-				.auth('unique@example.com', 'foobar124')
+				.auth('test@example.com', 'foobar124')
 				.end(function(err, res) {
 					expect(res.error.text).to.equal('Wrong Password\n');
 					done();

@@ -18,14 +18,26 @@ describe('Issues REST api', function() {
 		chai.request(app)
 			.post('/users')
 			.send({
-				username:'testuser1',
-				email: 'testuser1@example.com',
-				password: 'password'
+				username:'testuser',
+				email: 'test@example.com',
+				password: 'foobar123'
 			})
 			.end(function(err, res) {
 				testToken = res.body.data.token;
 				done();
 			}); 
+	});
+	before(function(done) {
+		chai.request(app)
+			.post('/issues')
+			.set({ 'eat': testToken })
+			.send({ 'title': 'Test issue',
+				'content': 'This is a test issue'
+			})
+			.end(function(err, res) {
+				testIssueId = res.body.data.id;
+				done();
+			});
 	});
 	
 	after(function(done) {
@@ -34,35 +46,31 @@ describe('Issues REST api', function() {
 		});
 	});
 
-	describe('Creating new issues', function() {
-		it('should save a new issue with a post request', function(done) {
+	describe('POST route on /issues (Creating a new issue)', function() {
+		it('Should create a new issue', function(done) {
 			var testIssue = {
 				title: 'Test Title', 
 				content: 'I approve of testing. Let us do more!', 
-				votes: {up: 1, down: 0},
-				date_created: 20150511
 			};
 			chai.request(app)
 				.post('/issues')
 				.set({'eat': testToken})
-				.send({issue: testIssue})
+				.send(testIssue)
 				.end(function(err, res) {
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
-					expect(res.body.msg).to.eql('You successfully saved a vote and issue');
-					testIssueId = res.body.data.id;
+					expect(res.body.msg).to.eql('You successfully created an issue');
 					done();
 				});
 		});
 	});
 
-	describe('Getting the different issue feeds', function() {
+	describe('GET route on /issues (Getting the issues feed)', function() {
 		it('should get an array of issues on a get request (sort = default)', function(done) {
-			chai.request('localhost:3000')
+			chai.request(app)
 				.get('/issues')
 				.set({eat: testToken})
 				.end(function(err, res) {
-					//These should fail for now
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
 					expect(res.body.msg).to.eql('Popular sort feed returned');
@@ -72,7 +80,7 @@ describe('Issues REST api', function() {
 		});
 
 		it('should get an array of issues on a get request (sort = newest)', function(done) {
-			chai.request('localhost:3000')
+			chai.request(app)
 				.get('/issues')
 				.query({sort: 'newest'})
 				.set({eat: testToken})
@@ -81,6 +89,43 @@ describe('Issues REST api', function() {
 					expect(res.body.success).to.eql(true);
 					expect(res.body.msg).to.eql('Newest sort feed returned');
 					expect(Array.isArray(res.body.data)).to.eql(true);
+					done();
+				});
+		});
+	});
+
+	describe('PUT route on /issues/:id (Submitting a vote for an issue)', function() {
+		it('Should save a vote of yes', function(done) {
+			chai.request(app)
+				.put('/issues/' + testIssueId)
+				.set({ eat: testToken })
+				.send({ "vote": "yes" })
+				.end(function(err, res) {
+					expect(err).to.equal(null);
+					expect(res.body.success).to.equal(true);
+					expect(res.body.msg).to.equal('You successfully voted for this issue');
+					done();
+				});
+		});
+		it('Should save a vote of no', function(done) {
+			chai.request(app)
+				.put('/issues/' + testIssueId)
+				.set({ eat: testToken })
+				.send({ "vote": "no" })
+				.end(function(err, res) {
+					expect(err).to.equal(null);
+					expect(res.body.success).to.equal(true);
+					expect(res.body.msg).to.equal('You successfully voted for this issue');
+					done();
+				});
+		});
+		it('Should give an error if no vote is submitted', function(done) {
+			chai.request(app)
+				.put('/issues/' + testIssueId)
+				.set({ eat: testToken })
+				.end(function(err, res) {
+					expect(res).to.have.status(500);
+					expect(res.body.msg).to.equal('Failed to vote on this issue');
 					done();
 				});
 		});
