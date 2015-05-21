@@ -75,7 +75,7 @@ module.exports = function(router) {
 						//Return sorted array
 						res.json({
 							success: true,
-							msg: 'Popular sort feed returned',
+							msg: 'Newest sort feed returned',
 							data: issueArray
 						});
 					}
