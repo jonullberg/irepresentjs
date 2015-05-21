@@ -1,249 +1,205 @@
 
-#iRepresent API & Documentation
-##**Endpoints > sign_in**
 
-###Authenticate to Application (GET /sign_in)
-***
+#**iRepresent** — App-athy is an Issue™
 
-**EXAMPLE:**
-HTTPS/1.1 GET https://`host`:`port`/sign_in
+iRepresent is an app that allows users to harness the collective voting power of their community. They can easily raise public awareness and bring issues to light as well as show their support by voting for or against other outstanding stuff.
 
-> `host` — The hostname/ip address where the iRepresent application resides.
-> `port` — The port the iRepresent application is running off of (omit if `80`).
-
-**PURPOSE:**
-Used to authenticate a user to the application. Successful authentication results in the creation of an `access_token` which is used to provide subsequent authentication to protected endpoints.
-
-**REQUEST PARAMETERS:**
-`none`
-
-**REQUEST HEADERS:**
-In order to authenticate to the `/sign_in` endpoint, the user/client must provide a Basic HTTP authentication `Authorization` header that is comprised of a base64-encoded concatenation of the username and password joined by a colon. i.e., `username:password`
-
-> **Authorization**: Basic cmFpbmJvd2ZhcnRpbmc6dW5pY29ybnM=
-
-**REQUEST BODY:**
-`none`
-
-**RESPONSE BODY:**
-```javascript
-{
-    success: <result>,
-    msg: <message>,
-    data: {
-        token: <token>
-    } 
-}
-``` 
-
-> `result` — A boolean indicating the success of the user authentication request.
-> `message` — Information regarding the result of the user authentication request.
-> `token` — The value of the `access_token` used to subsequently authenticate the user to the application.
+Get it [FREE in the App Store](https://store.apple.com/iRepresent).
 
 ***
+> **NOTICE** — The endpoints outlined in this document are not designed for public use. This documentation outlines the application's consumption of these resources. All requests to, and responses from, these endpoints are handled automatically.
 
-##**Endpoints > users**
-
-###Create a New User (POST /users)
+##**API Documentation >** Endpoints
 ***
+###**Create New User ** > POST /users
 
-**EXAMPLE:**
-HTTPS/1.1 POST https://`host`:`port`/users
+**PURPOSE** > This endpoint is used to create a new `User`.
 
-> `host` — The hostname/ip address where the iRepresent application resides.
-> `port` — The port the iRepresent application is running off of (omit if `80`).
+**PARAMS** > This endpoint *does not * require any parameters to be sent to it.
 
-**PURPOSE:**
-Used to create a new user into the application. Successful creation will result in the automatic logging in (and subsequent issuing of an `access_token` to) the user.
+**HEADERS** > This endpoint *does not* require any request headers to be sent to it.
 
-**REQUEST PARAMETERS:**
-`none`
+**BODY** > This endpoint requires a request body with the following syntax:
 
-**REQUEST HEADERS:**
-`none`
-
-**REQUEST BODY:**
 ```javascript
 {
     username: <username>,
     password: <password>,
-    email: <email>
+    email: <email> 
 }
 ```
 
-> `username` — The account name of the newly created user.
-> `password` — The password of the newly created user.
-> `email` — The email address of the newly created user.
+> `username:`  `required String` — The account name for the newly-created `User`. 
+> `password:` `required String` — The password for the newly-created `User`.
+> `email:` `required String` — The email address for the newly-created `User`.
 
-**RESPONSE BODY:**
+**RESPONSE** > Upon validation of the request, this endpoint will send a response in the following syntax:
 
 ```javascript
 {
     success: <result>,
-    msg: <message>,
+    message: <message>
+}
+```
+
+> `result` — A `Boolean` indicating if the creation of the `User` was successful.
+> `message` — A `String` that provides information as to the result of the request.
+
+
+
+***
+###**Authenticate Existing User** > GET /sign_in
+
+**PURPOSE** > This endpoint is used to authenticate supplied credentials and issue an `access token`.
+
+**PARAMS** > This endpoint *does not * require any parameters to be sent to it.
+
+**HEADERS** > This endpoint requires an `Authorization` header whose value is: `Basic` and a base64-encoded concatenation in the syntax: `username`:`password`.
+
+> **Authorization** : Basic cmFpbmJvd2ZhcnRpbmc6dW5pY29ybnM=
+
+**BODY** > This endpoint *does not* require a request body to be sent to it.
+
+**RESPONSE** > Upon validation of the request, this endpoint will send a response in the following syntax:
+
+```javascript
+{
+    success: <result>,
+    message: <message>,
     data: {
         token: <token>
     }
 }
 ```
-> `result` — A boolean indicating the success of the user creation request.
-> `message` — Information regarding the result of the user creation request.
-> `token` — The value of the `access_token` used to subsequently authenticate the user to the application.
+
+> `result` — A `Boolean` indicating if the authentication request was successful.
+> `message` — A `String` that provides information as to the result of the request.
+> `token` — A `String` that comprises of the `access token` value used to authenticate subsequent requests.
+
+
+
 
 ***
+###**View User Issues** > GET /issues
 
-##**Endpoints > issues**
+**PURPOSE** > This endpoint is used to obtain a list of `Issues` that the `User` has voted on.
 
-###Retrieve a List of User Issues (GET /issues)
-***
+**PARAMS** > This endpoint supports a `sort` parameter which determines how the returned `Issues` are sorted.
 
-**EXAMPLE:**
-HTTPS/1.1 GET https://`host`:`port`/issues[?sort=`sort`]
+*Examples:*
+GET /issues
+GET /issues?`sort`=newest
+GET /issues?`sort`=popular
 
-> `host` — The hostname/ip address where the iRepresent application resides.
-> `port` — The port the iRepresent application is running off of (omit if `80`).
-> `sort` — *(optional)* The sorting of returned `Issue` objects. The `popular` value (default) uses an algorithm to find issues which have a close spread of yes and no votes, weighed proportionally with higher count values, whereas the `newest` value lists the most recently created issues first.
+> `sort:` `optional String` — Indicates the type of sort to perform on the returned data. The default, `popular`, returns `Issues` that proportionally have a higher tally of votes and who are within a close spread between up and down votes. The other option, `newest` returns `Issues` sorted by the most recently created first.
 
-**PURPOSE:**
-Used to return a list of `Issue` objects that the user has voted on. The `access_token` that authenticates the user to this endpoint will be used to ensure that only issues which the user has voted yes or no on are returned in this feed.
+**HEADERS** > This is a protected endpoint which requires that a valid `access token` be supplied via a custom request header called `eat`. (Endpoint Authentication Token). This token provides the endpoint with identification and context of its respective authenticated `User`.
 
-**REQUEST PARAMETERS:**
-> `sort` — Indicates the sorting preference for the returned `Issue` objects. Defaults to `popular` when unspecified.
+> **eat** : 83hHJHfuy382thk/aoJjf3ff/Uafamro==
 
-**REQUEST HEADERS:**
-This is a protected endpoint that requires a valid `access_token` that can be obtained from authenticating to the `/sign_in` endpoint or creating a user through the `/users` endpoint.
+**BODY** > This endpoint *does not* require a request body to be sent to it.
 
-> **Token**: sajrh23h/JK9uiwrr9jJ/A2r0ipalallmfmqwru8sFG2jalsd==
-
-**REQUEST BODY:**
-`none`
-
-**RESPONSE BODY:**
+**RESPONSE** > Upon validation of the request, this endpoint will send a response in the following syntax:
 
 ```javascript
 {
     success: <result>,
-    msg: <message>,
+    message: <message>,
     data: {
-        <data>
+        <issues>
     }
 }
 ```
-> `result` — A `Boolean` indicating the success of the user issues request.
-> `message` — Information regarding the result of the user issues request.
-> `data` — An `Array` of 0 or more `Issue` objects in which the authenticated user has voted and ordered via the method specified by the optional `sort` request parameter.
 
-**ISSUE OBJECTS:**
-An example of an `Issue` object is provided below for reference:
+> `result` — A `Boolean` indicating if the user issues request was successful.
+> `message` — A `String` that provides information as to the result of the request.
+> `issues` — An `Array` of `Issues` which the authenticated `User` has voted on, optionally sorted in the method indicated in the **PARAMS** section.
+
+***
+###**Create New Issue** > POST /issues
+
+**PURPOSE** > This endpoint is used to create a new `Issue`.
+
+**PARAMS** > This endpoint *does not* require any parameters to be sent to it.
+
+**HEADERS** > This is a protected endpoint which requires that a valid `access token` be supplied via a custom request header called `eat`. (Endpoint Authentication Token). This token provides the endpoint with identification and context of its respective authenticated `User`.
+
+> **eat** : 83hHJHfuy382thk/aoJjf3ff/Uafamro==
+
+**BODY** > This endpoint requires a request body with the following syntax:
 
 ```javascript
 {
-    author_id: <author>,
     title: <title>,
-    content: <content>,
-    votes: {
-        yes: <yes_votes>,
-        no: <no_votes>
-    },
-    date_created: <created>
-}
-```
-> `author` — The `user_id` who created the `Issue`.
-> `title` — A display heading for the `Issue`.
-> `content` — A description of the `Issue`.  
-> `yes_votes` — A tally of the affirmative votes on the `Issue`.
-> `no_votes` — A tally of the negative votes on the `Issue`.
-> `created` — The date and time that the `Issue` was created.
-
-***
-
-###Create a New Issue (POST /issues)
-***
-
-**EXAMPLE:**
-HTTPS/1.1 POST https://`host`:`port`/issues
-
-> `host` — The hostname/ip address where the iRepresent application resides.
-> `port` — The port the iRepresent application is running off of (omit if `80`).
-
-**PURPOSE:**
-Used to create a new issue in the application.
-
-**REQUEST PARAMETERS:**
-`none`
-
-**REQUEST HEADERS:**
-This is a protected endpoint that requires a valid `access_token` that can be obtained from authenticating to the `/sign_in` endpoint or creating a user through the `/users` endpoint.
-
-> **Token**: sajrh23h/JK9uiwrr9jJ/A2r0ipalallmfmqwru8sFG2jalsd==
-
-**REQUEST BODY:**
-
-```javascript
-{
-    title : <title>,
-    content : <content>
+    content: <content>
 }
 ```
 
-> `title` — The heading of the newly created `Issue`.
-> `content` — Descriptive information of the newly created `Issue`.
+> `title:`  `required String` — A heading for the newly-created `Issue`. 
+> `content:` `required String` — A description for the newly-created `Issue`.
 
-**RESPONSE BODY:**
+
+**RESPONSE** > Upon validation of the request, this endpoint will send a response in the following syntax:
 
 ```javascript
 {
     success: <result>,
-    msg: <message>
+    message: <message>,
+    data: {
+        id: <id>
+    }
 }
 ```
-> `result` — A boolean indicating the success of the user issue request.
-> `message` — Information regarding the result of the user issue request.
+
+> `result` — A `Boolean` indicating if the creation of the `Issue` was successful.
+> `message` — A `String` that provides information as to the result of the request.
+> `id` — The ID of the newly-created `Issue`.
+
+
 
 ***
+###**Vote On Issue** > PUT /issues/[issue_id]
 
-###Cast a Vote on an Issue (PUT /issues/id)
-***
+**PURPOSE** > This endpoint is used to cast a vote on an `Issue`.
 
-**EXAMPLE:**
-HTTPS/1.1 PUT https://`host`:`port`/issues/`issue_id`
+**PARAMS** > This endpoint supports an `issue_id` parameter which indicates the `Issue` that is being voted on.
 
-> `host` — The hostname/ip address where the iRepresent application resides.
-> `port` — The port the iRepresent application is running off of (omit if `80`).
-> `issue_id` — The `issue_id` of the `Issue` that the vote is casted on.
+*Example:*
+PUT /issues/551239583920039
 
-**PURPOSE:**
-Used to update the vote count of an `Issue`.
+> `issue_id:` `required Number` — Specifies the `issue_id` of the `Issue` that the request's vote is being cast upon.
 
-**REQUEST PARAMETERS:**
-`none`
+**HEADERS** > This is a protected endpoint which requires that a valid `access token` be supplied via a custom request header called `eat`. (Endpoint Authentication Token). This token provides the endpoint with identification and context of its respective authenticated `User`.
 
-**REQUEST HEADERS:**
-This is a protected endpoint that requires a valid `access_token` that can be obtained from authenticating to the `/sign_in` endpoint or creating a user through the `/users` endpoint.
+> **eat** : 83hHJHfuy382thk/aoJjf3ff/Uafamro==
 
-> **Token**: sajrh23h/JK9uiwrr9jJ/A2r0ipalallmfmqwru8sFG2jalsd==
+**BODY** > This endpoint requires a request body with the following syntax:
 
-**REQUEST BODY:**
 ```javascript
 {
-    vote : <vote>
+    vote: <votes>
 }
 ```
-> `vote` — A `Boolean` value, indicating an affirmative vote if `true` and a negative vote it `false`.
 
-**RESPONSE BODY:**
+> `vote:`  `required String` — The value `yes` to indicate an affirmative/agreeing vote, or `no` to indicate a negating/disagreeing vote for the `Issue` specified by the `issue_id` in the request URL
+
+
+**RESPONSE** > Upon validation of the request, this endpoint will send a response in the following syntax:
 
 ```javascript
 {
     success: <result>,
-    msg: <message>
+    message: <message>
 }
 ```
-> `result` — A boolean indicating the success of the vote cast request.
-> `message` — Information regarding the result of the vote cast request.
+
+> `result` — A `Boolean` indicating if the creation of the `Issue` was successful.
+> `message` — A `String` that provides information as to the result of the request.
+
+
 
 ***
-**CREDITS:**
+**CREDITS** > *alphabetized*
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*iOS:*
 
@@ -255,3 +211,6 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 * Eeshan Kumar
 * Emre Surmeli
 * Jonathan Ullberg
+
+***
+**THANKS TO** > NodeJS, Express, Mongoose, Mongoose Validator, MongoDB, EAT, Body Parser, Passport, Passport-HTTP, Gulp, Gulp-JSHint, Gulp-Mocha, Mocha, Chai, ChaiHTTP, JSHint-Stylish, BCrypt and Heroku.
