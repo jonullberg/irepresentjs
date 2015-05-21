@@ -1,9 +1,15 @@
 
-#iRepresent API & Documentation
-##**Endpoints > sign_in**
+#iRepresent
+###Because Political App-athy has its Issues™
 
-###Authenticate to Application (GET /sign_in)
+iRepresent is an iPhone application that allows users to become vested in the political happenings of King County, Washington. You can bring to light and harness the collective will of the people to champion your issue's cause and even take part in the democratic process by voting your say on new and popular topics.
+
+[Download it FREE, on the App Store](https://store.apple.com/iRepresent)
+
 ***
+
+##**API Reference**
+###Authenticate to Application (GET /sign_in)
 
 **EXAMPLE:**
 HTTPS/1.1 GET https://`host`:`port`/sign_in
@@ -14,25 +20,33 @@ HTTPS/1.1 GET https://`host`:`port`/sign_in
 **PURPOSE:**
 Used to authenticate a user to the application. Successful authentication results in the creation of an `access_token` which is used to provide subsequent authentication to protected endpoints.
 
+***
+
 **REQUEST PARAMETERS:**
 `none`
+
+***
 
 **REQUEST HEADERS:**
 In order to authenticate to the `/sign_in` endpoint, the user/client must provide a Basic HTTP authentication `Authorization` header that is comprised of a base64-encoded concatenation of the username and password joined by a colon. i.e., `username:password`
 
 > **Authorization**: Basic cmFpbmJvd2ZhcnRpbmc6dW5pY29ybnM=
 
+***
+
 **REQUEST BODY:**
 `none`
+
+***
 
 **RESPONSE BODY:**
 ```javascript
 {
-    success: <result>,
-    msg: <message>,
-    data: {
-        token: <token>
-    } 
+success: <result>,
+msg: <message>,
+data: {
+token: <token>
+} 
 }
 ``` 
 
@@ -65,9 +79,9 @@ Used to create a new user into the application. Successful creation will result 
 **REQUEST BODY:**
 ```javascript
 {
-    username: <username>,
-    password: <password>,
-    email: <email>
+username: <username>,
+password: <password>,
+email: <email>
 }
 ```
 
@@ -79,11 +93,11 @@ Used to create a new user into the application. Successful creation will result 
 
 ```javascript
 {
-    success: <result>,
-    msg: <message>,
-    data: {
-        token: <token>
-    }
+success: <result>,
+msg: <message>,
+data: {
+token: <token>
+}
 }
 ```
 > `result` — A boolean indicating the success of the user creation request.
@@ -122,11 +136,11 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 
 ```javascript
 {
-    success: <result>,
-    msg: <message>,
-    data: {
-        <data>
-    }
+success: <result>,
+msg: <message>,
+data: {
+<data>
+}
 }
 ```
 > `result` — A `Boolean` indicating the success of the user issues request.
@@ -138,14 +152,14 @@ An example of an `Issue` object is provided below for reference:
 
 ```javascript
 {
-    author_id: <author>,
-    title: <title>,
-    content: <content>,
-    votes: {
-        yes: <yes_votes>,
-        no: <no_votes>
-    },
-    date_created: <created>
+author_id: <author>,
+title: <title>,
+content: <content>,
+votes: {
+yes: <yes_votes>,
+no: <no_votes>
+},
+date_created: <created>
 }
 ```
 > `author` — The `user_id` who created the `Issue`.
@@ -181,8 +195,8 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 
 ```javascript
 {
-    title : <title>,
-    content : <content>
+title : <title>,
+content : <content>
 }
 ```
 
@@ -193,8 +207,8 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 
 ```javascript
 {
-    success: <result>,
-    msg: <message>
+success: <result>,
+msg: <message>
 }
 ```
 > `result` — A boolean indicating the success of the user issue request.
@@ -226,7 +240,7 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 **REQUEST BODY:**
 ```javascript
 {
-    vote : <vote>
+vote : <vote>
 }
 ```
 > `vote` — A `Boolean` value, indicating an affirmative vote if `true` and a negative vote it `false`.
@@ -235,8 +249,8 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 
 ```javascript
 {
-    success: <result>,
-    msg: <message>
+success: <result>,
+msg: <message>
 }
 ```
 > `result` — A boolean indicating the success of the vote cast request.
@@ -255,3 +269,6 @@ This is a protected endpoint that requires a valid `access_token` that can be ob
 * Eeshan Kumar
 * Emre Surmeli
 * Jonathan Ullberg
+
+**TO DO:**
+
