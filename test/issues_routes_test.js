@@ -60,7 +60,6 @@ describe('Issues REST api', function() {
 				.get('/issues')
 				.set({eat: testToken})
 				.end(function(err, res) {
-					//These should fail for now
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
 					expect(res.body.msg).to.eql('Popular sort feed returned');

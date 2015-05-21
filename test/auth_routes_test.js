@@ -60,18 +60,6 @@ describe('The login API', function() {
 				});
 		});
 		describe('Unique emails and usernames', function() {
-			// before(function(done) {
-			// 	chai.request(app)
-			// 		.post('/users')
-			// 		.send({
-			// 			'username': 'testUser2',
-			// 			'email': 'unique2@example.com',
-			// 			'password': 'foobar123'
-			// 		})
-			// 		.end(function() {
-			// 			done();
-			// 		});
-			// });
 			it('Should not be able to create a user with a repeated username', function(done) {
 				chai.request(app)
 					.post('/users')
