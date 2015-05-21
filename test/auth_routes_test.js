@@ -72,7 +72,7 @@ describe('The login API', function() {
 			// 			done();
 			// 		});
 			// });
-			it('Should not be able to create a user with a non-unique username', function(done) {
+			it('Should not be able to create a user with a repeated username', function(done) {
 				chai.request(app)
 					.post('/users')
 					.send({
@@ -87,12 +87,12 @@ describe('The login API', function() {
 						done();
 					});
 			});
-			it('Should not be able to create a user with a non-unique email', function(done) {
+			it('Should not be able to create a user with a repeated email', function(done) {
 				chai.request(app)
 					.post('/users')
 					.send({
 						'username': 'testUser3',
-						'email': 'unique2@example.com',
+						'email': 'unique@example.com',
 						'password': 'foobar123'
 					})
 					.end(function(err, res) {

@@ -24,7 +24,7 @@ describe('Issues REST api', function() {
 			})
 			.end(function(err, res) {
 				testToken = res.body.data.token;
-				done();
+				return testToken, done();
 			}); 
 	});
 	
@@ -43,7 +43,7 @@ describe('Issues REST api', function() {
 			chai.request(app)
 				.post('/issues')
 				.set({'eat': testToken})
-				.send({issue: testIssue})
+				.send(testIssue)
 				.end(function(err, res) {
 					expect(err).to.eql(null);
 					expect(res.body.success).to.eql(true);
@@ -114,7 +114,8 @@ describe('Issues REST api', function() {
 				.put('/issues/' + testIssueId)
 				.set({ eat: testToken })
 				.end(function(err, res) {
-					console.log(res);
+					expect(res).to.have.status(500);
+					expect(res.body.msg).to.equal('Failed to vote on this issue');
 					done();
 				});
 		});
