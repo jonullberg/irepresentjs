@@ -4,13 +4,11 @@ var bodyparser = require('body-parser');
 var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
 var Issue = require('../models/Issue');
 var Vote = require('../models/Vote');
+var sort = require('../lib/popularitySort');
+var randalizeDate = require('../lib/randalizeDate');
 
 module.exports = function(router) {
 	router.use(bodyparser.json());
-
-	//Jonathan
-	//Redo this new issue code to call issue.addIssue method
-	//This method should add a new vote as well
 
 	router.post('/issues', eatAuth, function(req, res) {
 		var newIssue = new Issue(req.body.issue);
@@ -47,16 +45,10 @@ module.exports = function(router) {
 
 	router.get('/issues', eatAuth, function(req, res) {
 
-		//Emre
-		//Do sort based on query
-		//Call tallyVotes (Eeshan to write this method)
-		//Send data to Randy via res
-		//Below is old code
-
 		if (req.query.sort === 'newest') { //Check if newest sort
 			console.log('newest sort');
 			Issue.aggregate([
-				{ $sort: { date_created: 1 } }
+				{ $sort: { date_created: -1 } }
 			], function(err, issueArray) {
 				if(err) {
 					console.log(err);
@@ -66,19 +58,47 @@ module.exports = function(router) {
 					});
 				}
 				//Add user vote to sorted array
-				issueArray.forEach(getUserVote);
-
-				//Return sorted array
-				res.json({
-					success: true,
-					msg: 'Newest sort feed returned',
-					data: issueArray
+				issueArray.forEach(function(issue) {
+					var total = 3;
+					var count = 0;
+					issue.date_created = randalizeDate(issue.date_created);
+					Vote.count({ 'issue_id': issue._id, 'vote': true }, function (err, count) {
+						issue.votes_up = count;
+						runCallback();
+					});
+					Vote.count({ 'issue_id': issue._id, 'vote': false }, function (err, count) {
+						issue.votes_down = count;
+						runCallback();
+					});
+					Vote.count({ 'issue_id': issue._id }, function (err, count) {
+						issue.votes_total = count;
+						runCallback();
+					});
+					function runCallback() {
+						count++;
+						if (count === total) {
+							functionAfterForEach();
+						}
+					}
 				});
+
+				var total = issueArray.length;
+				var count = 0;
+				function functionAfterForEach() {	
+					count++;
+					if (count === total) {
+						//Return sorted array
+						res.json({
+							success: true,
+							msg: 'Newest sort feed returned',
+							data: issueArray
+						});
+					}
+				};
 			});
 		} else { //Default of popular sort
-			Issue.aggregate([
-				{ $sort: { 'votes.total': 1 } }
-			], function(err, issueArray) {
+			console.log('popular sort');
+			Issue.aggregate([{$project:{_id:1, 'title':'$title', 'content':'$content','date_created':'$date_created', 'author_id':'$author_id'}}], function(err, issueArray) {
 				if(err) {
 					console.log(err);
 					return res.status(500).json({
@@ -86,38 +106,57 @@ module.exports = function(router) {
 						msg: 'internal server error'
 					});
 				}
-				//Add user vote to sorted array
-				issueArray.forEach(getUserVote);
-
-				//Return sorted array
-				res.json({
-					success: true,
-					msg: 'Popular sort feed returned',
-					data: issueArray
+				//Add user vote to array
+				issueArray.forEach(function(issue) {
+					var total = 3;
+					var forEachCount = 0;
+					issue.date_created = randalizeDate(issue.date_created);
+					Vote.count({ 'issue_id': issue._id, 'vote': true }, function (err, count) {
+						issue.votes_up = count;
+						runCallback();
+					});
+					Vote.count({ 'issue_id': issue._id, 'vote': false }, function (err, count) {
+						issue.votes_down = count;
+						runCallback();
+					});
+					Vote.count({ 'issue_id': issue._id }, function (err, count) {
+						issue.votes_total = count;
+						runCallback();
+					});
+					function runCallback() {
+						forEachCount++;
+						if (forEachCount === total) {
+							functionAfterForEach();
+						}
+					}
 				});
+
+				var total = issueArray.length;
+				var issueArrayCount = 0;
+				function functionAfterForEach() {	
+					issueArrayCount++;
+					if (issueArrayCount === total) {
+						//Sort array via popularity sort
+						issueArray = sort(issueArray);
+						//Return sorted array
+						res.json({
+							success: true,
+							msg: 'Popular sort feed returned',
+							data: issueArray
+						});
+					}
+				};
 			});
 		}
-		
-		function getUserVote(issue) {
-			var userVote = req.user.getUserVote(issue._id);
-			if (userVote === undefined) { return; }
-			issue.user_vote = userVote;
- 		}
 	});
 
 	router.put('/issues/:id', eatAuth, function(req, res) {
-
-		//Jonathan
-		//Redo this to add a new Vote
-
-
 		var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
-		if(req.body.vote === 'yes') {
-			newVote.vote = true;
-		}
-		newVote.vote = false;
+		if(req.body.vote === undefined) newVote.vote = null;
+		if(req.body.vote === 'yes') newVote.vote = true;
+		if(req.body.vote === 'no') newVote.vote = false;
 
 		newVote.save(function(err, vote) {
 			if(err) {
@@ -133,55 +172,5 @@ module.exports = function(router) {
 			});
 		});
 
-		// Issue.findOne({ _id: req.params.id }, function(err, issue) {
-		// 	issue.updateVote(req.body.vote, function(err, data) {
-		// 		if (err) {
-		// 			console.log(err);
-		// 			return res.status(500).json({
-		// 				'success': false,
-		// 				'msg': 'Failed to record vote'
-		// 			});
-		// 		}
-		// 		return res.json({
-		// 			'success': true,
-		// 			'msg': 'Recorded ' + data + ' vote'
-		// 		});
-		// 	});
-		// });
-
-		// if(req.body.vote === 'yes') {
-		// 	Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.up': 1 }}, {upsert: true, 'new': true}, function(err, issue) {
-		// 			if(err) {
-		// 				console.log(err);
-		// 				return res.status(500).json({
-		// 					'success': false,
-		// 					'msg': 'Failed to record vote'
-		// 				});
-		// 			}
-		// 			return res.json({
-		// 				'success': true,
-		// 				'msg': 'Recorded a yes vote for this issue'
-		// 			});
-		// 		});
-		// } else {
-		// 	Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.down': 1 }}, {upsert: true }, 
-		// 		function(err, issue) {
-		// 			console.log(issue);
-		// 			if(err) {
-		// 				console.log(err);
-		// 				return res.status(500).json({
-		// 					'success': false,
-		// 					'msg': 'Failed to record a vote'
-		// 				});
-		// 			}
-
-		// 			return res.json({
-		// 				'success': true,
-		// 				'msg': 'Recorded a yes vote for this issue'
-		// 			});
-
-		// 		});
-
-		// }
 	});
 };
