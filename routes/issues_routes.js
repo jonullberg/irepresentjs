@@ -11,10 +11,9 @@ module.exports = function(router) {
 	router.use(bodyparser.json());
 
 	router.post('/issues', eatAuth, function(req, res) {
-		var newIssue = new Issue(req.body.issue);
+		var newIssue = new Issue(req.body);
 		newIssue.author_id = req.user.id;
 		newIssue.date_created = new Date();
-		console.log(newIssue);
 		newIssue.save(function(err, issue) {
 			if(err) {
 				console.log(err);

@@ -117,6 +117,6 @@ describe('Issues REST api', function() {
 					console.log(res);
 					done();
 				});
-		})
+		});
 	});
 });
