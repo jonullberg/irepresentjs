@@ -10,10 +10,6 @@ var randalizeDate = require('../lib/randalizeDate');
 module.exports = function(router) {
 	router.use(bodyparser.json());
 
-	//Jonathan
-	//Redo this new issue code to call issue.addIssue method
-	//This method should add a new vote as well
-
 	router.post('/issues', eatAuth, function(req, res) {
 		var newIssue = new Issue(req.body.issue);
 		newIssue.author_id = req.user.id;
@@ -158,10 +154,9 @@ module.exports = function(router) {
 		var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
-		if(req.body.vote === 'yes') {
-			newVote.vote = true;
-		}
-		newVote.vote = false;
+		if(req.body.vote === undefined) newVote.vote = null;
+		if(req.body.vote === 'yes') newVote.vote = true;
+		if(req.body.vote === 'no') newVote.vote = false;
 
 		newVote.save(function(err, vote) {
 			if(err) {
@@ -177,55 +172,5 @@ module.exports = function(router) {
 			});
 		});
 
-		// Issue.findOne({ _id: req.params.id }, function(err, issue) {
-		// 	issue.updateVote(req.body.vote, function(err, data) {
-		// 		if (err) {
-		// 			console.log(err);
-		// 			return res.status(500).json({
-		// 				'success': false,
-		// 				'msg': 'Failed to record vote'
-		// 			});
-		// 		}
-		// 		return res.json({
-		// 			'success': true,
-		// 			'msg': 'Recorded ' + data + ' vote'
-		// 		});
-		// 	});
-		// });
-
-		// if(req.body.vote === 'yes') {
-		// 	Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.up': 1 }}, {upsert: true, 'new': true}, function(err, issue) {
-		// 			if(err) {
-		// 				console.log(err);
-		// 				return res.status(500).json({
-		// 					'success': false,
-		// 					'msg': 'Failed to record vote'
-		// 				});
-		// 			}
-		// 			return res.json({
-		// 				'success': true,
-		// 				'msg': 'Recorded a yes vote for this issue'
-		// 			});
-		// 		});
-		// } else {
-		// 	Issue.findOneAndUpdate({ _id: req.params.id }, {$inc: {'votes.down': 1 }}, {upsert: true }, 
-		// 		function(err, issue) {
-		// 			console.log(issue);
-		// 			if(err) {
-		// 				console.log(err);
-		// 				return res.status(500).json({
-		// 					'success': false,
-		// 					'msg': 'Failed to record a vote'
-		// 				});
-		// 			}
-
-		// 			return res.json({
-		// 				'success': true,
-		// 				'msg': 'Recorded a yes vote for this issue'
-		// 			});
-
-		// 		});
-
-		// }
 	});
 };
