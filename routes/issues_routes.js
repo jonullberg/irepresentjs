@@ -13,7 +13,7 @@ module.exports = function(router) {
 	router.post('/issues', eatAuth, function(req, res) {
 		var newIssue = new Issue(req.body.issue);
 		newIssue.author_id = req.user.id;
-		newIssue.date_created = new Date().now;
+		newIssue.date_created = new Date();
 		console.log(newIssue);
 		newIssue.save(function(err, issue) {
 			if(err) {
@@ -150,11 +150,10 @@ module.exports = function(router) {
 		}
 	});
 
-	router.put('/issues/:id', eatAuth, function(req, res) {
-		var newVote = new Vote();
+	router.put('/issues/:id', eatAuth, function(req, res) {		
+	var newVote = new Vote();
 		newVote.issue_id = req.params.id;
 		newVote.user_id = req.user.id;
-		if(req.body.vote === undefined) newVote.vote = null;
 		if(req.body.vote === 'yes') newVote.vote = true;
 		if(req.body.vote === 'no') newVote.vote = false;
 
